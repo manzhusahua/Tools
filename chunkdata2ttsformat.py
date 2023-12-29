@@ -12,6 +12,7 @@ import wave
 
 from os.path import dirname, realpath, sep, pardir
 from pathlib import Path
+import multiprocessing
 
 sys.path.append(dirname(__file__))
 sys.path.append(dirname(realpath(__file__)))
@@ -199,25 +200,21 @@ def run(mini_batch):
     return CHUNK_STEP.prs_step_run(mini_batch)
 
 
-# End of the required functions for AML PRS step
+def to_blob(chunk_name):
+    run_word_donwoldas = './cookingspeech/step/azcopy.exe copy "https://zettaprod01scus.blob.core.windows.net/data/users/v-zhazhai/Language/zh-CN/TTS/chunkfiles/zhCN_26kNewData_FY23/5KPublicLiveBroadcast_FY22_CUT/ChunkFiles/*?sv=2021-10-04&se=2024-01-27T05%3A53%3A07Z&sr=c&sp=rwl&sig=Katqq6Hm1n9MEU7fFenrjbJvsPAvwo5W9J8kl44Oo3Y%3D" "./test/test_data/sample_chunks/zh-cn_chunk/5KPublicLiveBroadcast_FY22_CUT" --overwrite=false --include-pattern="{}.*"'.format(chunk_name)
+    os.system(run_word_donwoldas)
 
 
-# This function can contain main func so we can quickly local dev and debug this file
-if __name__ == "__main__":
-    from util.logger_util import LoggerUtil
-
-    LoggerUtil.setup_logger()
-
-    dataset_path = r"./test/test_data/sample_chunks/zn-CN-chunk/chunk_files"
+    dataset_path = r"./test/test_data/sample_chunks/zh-cn_chunk/5KPublicLiveBroadcast_FY22_CUT"
     chunk_name_list = [
-        "chunk_00122597-34d2-11ee-a984-002248b798ca",
+        chunk_name,
     ]
 
-    temp_output_path = r"./test/test_data/sample_chunks/zn-CN-chunk/temp"
+    temp_output_path = r"./test/test_data/sample_chunks/zh-cn_chunk/temp"
     if os.path.exists(temp_output_path):
         shutil.rmtree(temp_output_path)
     os.makedirs(temp_output_path, exist_ok=True)
-    final_output_path = r"./test/test_data/sample_chunks/zn-CN-chunk/result"
+    final_output_path = r"./test/test_data/sample_chunks/zh-cn_chunk/result"
     if os.path.exists(final_output_path):
         shutil.rmtree(final_output_path)
     os.makedirs(final_output_path, exist_ok=True)
@@ -230,10 +227,27 @@ if __name__ == "__main__":
         chunkdata2ttsformat_processing.copy_chunk_data(
             chunk_name, temp_output_path, final_output_path, delete_after_copy=True
         )
+    run_word_ipdata = './cookingspeech/step/azcopy.exe copy "./test/test_data/sample_chunks/zh-cn_chunk/result/{}/*" "https://zettaprod01scus.blob.core.windows.net/data/users/v-zhazhai/Language/zh-CN/TTS/chunkfiles/output/zhCN_26kNewData_FY23/5KPublicLiveBroadcast_FY22_CUT/chunkdata2ttsformat/{}?sv=2021-10-04&se=2024-01-27T05%3A53%3A07Z&sr=c&sp=rwl&sig=Katqq6Hm1n9MEU7fFenrjbJvsPAvwo5W9J8kl44Oo3Y%3D" --overwrite=false'.format(chunk_name,chunk_name)
+    os.system(run_word_ipdata)
 
-    # if os.path.exists(temp_output_path):
-    #     shutil.rmtree(temp_output_path)
-    # if os.path.exists(final_output_path):
-    #     shutil.rmtree(final_output_path)
+    if os.path.exists(temp_output_path):
+       shutil.rmtree(temp_output_path)
+    if os.path.exists(final_output_path):
+       shutil.rmtree(final_output_path)
+    for name in os.listdir("./test/test_data/sample_chunks/zh-cn_chunk/5KPublicLiveBroadcast_FY22_CUT"):
+        os.remove(os.path.join("./test/test_data/sample_chunks/zh-cn_chunk/5KPublicLiveBroadcast_FY22_CUT",name))
 
+# End of the required functions for AML PRS step
+
+
+# This function can contain main func so we can quickly local dev and debug this file
+if __name__ == "__main__":
+    from util.logger_util import LoggerUtil
+
+    LoggerUtil.setup_logger()
+    with open("./test/test_data/sample_chunks/zh-cn_chunk/5KPublicLiveBroadcast_FY22_CUT_v1.txt",'r',encoding='utf8') as f:
+        for line in f.readlines():
+            chunk_name = line.replace('\n','')
+            to_blob(chunk_name)
+            print(chunk_name+" Done")
     print("Done")
