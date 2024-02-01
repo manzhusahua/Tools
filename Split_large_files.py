@@ -1,32 +1,29 @@
-import sys,os
-
-#拆分大文件
-head = "sid|locale|speaker|style|text|phones|durations|speech_length_in_s|speech_path|textless|human_voice|multispeaker_detect_score|mel_path|sf_path|uv_path|stat_path|syl_phone_num|has_left_context|has_right_context"
+import pandas as pd
+import os
 
 
-# metadata_files = sys.argv[1]
-metadata_files =  r"C:\Users\v-zhazhai\Desktop\r12\metadata_0_v1.csv"
-# save_path = sys.argv[2]
-save_path = r"C:\Users\v-zhazhai\Desktop\r12_1"
-# os.mkdir(save_path)
-# n = sys.argv[3]
-n = 0
+# 读取csv文件
+df = pd.read_csv(r"C:\Users\v-zhazhai\Desktop\metadata_Zh-TWMale_general.csv", sep='|', encoding='utf-8')
+save_path = r"C:\Users\v-zhazhai\Desktop\merged_more_books_with_small_metadata"
+if not os.path.exists(save_path):
+    os.makedirs(save_path, exist_ok=True)
+# 获取文件总行数
+row_num = len(df)
+print(row_num)
 
-word=[]
-with open(metadata_files,'r',encoding='utf8') as f:
-    for line in f.readlines()[1:]:
-        word.append(line)
-count=int(len(word)/2000)
+
+# 确定每个小文件要包含的数据量
+step = 2000
 i=0
-while i<=count:
-    save_names = int(n)+i
-    with open(os.path.join(os.path.join(save_path,"metadata_"+str(save_names)+'.csv')),'w',encoding='utf8') as s:
-        s.writelines(head+'\n')
-        if 2000*(i+1) < len(word):
-            for line in word[2000*i:2000*(i+1)]:
-                s.writelines(line)
-        else:
-            for line in word[2000*i:]:
-                s.writelines(line)
+for start in range(0, row_num, step):
+    stop = start + step
+    filename = os.path.join(save_path,"metadata_{}.csv".format(str(i)))
+    d = df[start: stop]
+    print("Saving file : " + filename + ", data size : " + str(len(d)))
+    d.to_csv(filename, sep='|', encoding='utf-8', index=None)
     i+=1
 
+
+# 输出如下
+# Saving file : ./small_0-500.csv, data size : 500
+# Saving file : ./small_500-1000.csv, data size : 500
