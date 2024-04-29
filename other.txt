@@ -1,0 +1,11 @@
+python aml_submit.py --config_path "C:\Users\v-zhazhai\Downloads\Jin Shang\Speech_talk_HumanCaption.yaml" --experiment_name ntts_dataprocessing_e2e_rawdatainput --workspace_name zetta-prod-ws02-eus2 --prs_compute_target_name ZettA-AML-E8v3 --pss_compute_target_name ZettA-AML-E8v3 --display_name Speech_talk_HumanCaption_try3
+
+
+Password1
+v-zhazhai
+sudo usermod -a -G ssh v-huayuecao
+stcvm-linux146 给你创建的账户名是 v-zhazhai，初始密码是 Password1
+
+
+sudo deluser v-huayuecao sudo
+groups v-zhazhai
