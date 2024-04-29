@@ -70,6 +70,11 @@ def updata_blob(part):
     word = r'C:\Users/v-zhazhai/Toosl/code/Tool/merger_tar/azcopy.exe copy "C:\Users\v-zhazhai\Downloads\de-DE\{}\*" "https://stdstoragettsdp01eus.blob.core.windows.net/data/TTS_ChunkData/YouTube/v3/YouTube_temp/de-DE/{}/?sv=2023-01-03&se=2024-05-16T08%3A20%3A47Z&sr=c&sp=rwl&sig=PnvQUqQ2JxilMlyyxwB1PP4dHhR%2BxtjTPih5C7uwoFE%3D" --overwrite=false'.format(part,part)
     os.system(word)
 
+def rename(filepath):
+    for name in os.listdir(filepath):
+        os.rename(os.path.join(filepath,name),os.path.join(filepath,name+".wav"))
+
+
 if __name__ == "__main__":
     # file_path = r"C:\Users\v-zhazhai\Downloads\de-DE.txt"
     # # file_path = sys.argv[1]
@@ -81,7 +86,4 @@ if __name__ == "__main__":
     # dir_path = r"C:\Users\v-zhazhai\debug\richland\ttschunk_out2"
     # chunk_name = "chunk_9b4105557f469b239a8deecd2af1ef91_0"
     # upload_data(dir_path, chunk_name)
-    n= 6
-    while n<=15:
-        updata_blob("batch"+str(n).zfill(2))
-        n+=1
+    rename(r"C:\Users\v-zhazhai\debug\richland\chunks\chunk_en-au_EnAU2581MSMIVO_0")
