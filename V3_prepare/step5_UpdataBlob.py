@@ -7,7 +7,7 @@ class step5:
 
     def step5_updata_tts_filelist(self,local,files_path,batch):
         input_path = "\\".join([files_path,"v3",'step3_extract_tts_filelist',batch+'.txt'])
-        token = r'?sv=2023-01-03&se=2024-05-17T03%3A16%3A56Z&sr=c&sp=rwl&sig=dl6TCBSIttrShrUPUtcCh%2FLKwrIJJR3BoqmRZ%2BOJPF0%3D'
+        token = r'?sv=2023-01-03&st=2024-04-29T02%3A12%3A52Z&se=2024-05-31T02%3A12%3A00Z&sr=c&sp=racwdxltf&sig=y4qplet74XqfhN9o46HzSMXj29clJcj6faAc%2B1L5fYI%3D'
         updata_tts_filelist = 'C:/Users/v-zhazhai/Toosl/Tools/azcopy.exe copy "{}" "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/TTS_filelist/{}/{}{}" --overwrite=false'.format(input_path,local,batch+'.txt',token)
         print(updata_tts_filelist)
         os.system(updata_tts_filelist)

@@ -24,4 +24,4 @@ def has_folder(speaker,metadatafloder):
 
 if __name__ == "__main__":
         # has_folder("EnUSLibri-RTTS",r"C:\Users\v-zhazhai\Desktop\merged_more_books_with_small_metadata_updata_sid_context_speaker2")
-        not_fold("enUS_long_form_r12",2083,r"C:\Users\v-zhazhai\Desktop\r12_1")
+        not_fold("Jessa",9,r"C:\Users\v-zhazhai\Downloads")

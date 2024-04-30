@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import sys
 
 class step2:
     def __init__(self) -> None:
@@ -74,13 +75,14 @@ class step2:
         SaveData.to_csv(statistical_file.replace('.txt',".csv"), sep="\t", index=False, header=True)
 
     def run(self,inputdir,locals):
-        # output = r"C:\Users\v-zhazhai\Desktop\TTS\pt-BR\YouTube\pt-BR_statistical.txt"
+        # output = r"C:\Users\v-zhazhai\Desktop\TTS\It-IT\YouTube\it-IT_statistical.txt"
         output = self.step2_extractvttlist(inputdir,locals)
         self.step2_statistical(output)
         return output.replace('.txt',".csv")
 
 
 if __name__ == "__main__":
-    inputdir = ""
-    locals = ""
+    inputdir = sys.argv[1]
+    locals = sys.argv[2]
+    # # step2().step2_statistical(r"C:\Users\v-zhazhai\Desktop\TTS\It-IT\YouTube\it-IT_statistical.txt")
     step2.run(inputdir,locals)

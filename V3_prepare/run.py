@@ -6,8 +6,8 @@ from step4_dump_json import step4
 from step5_UpdataBlob import step5
 import pandas as pd
 
-locals = "pt-BR"
-inputdir = r"C:\Users\v-zhazhai\Desktop\TTS\pt-BR\YouTube"
+locals = "ko-KR"
+inputdir = r"C:\Users\v-zhazhai\Desktop\TTS\ko-KR\YouTube"
 
 step1 = STEP1()
 step2 = step2()
@@ -17,9 +17,9 @@ step5 = step5()
 
 # print("step1_getaudioList start")
 # step1.run(inputdir,locals)
-# print("step2_extractvttlist start")
-# statistical_file = step2.run(inputdir,locals)
-statistical_file = r"C:\Users\v-zhazhai\Desktop\TTS\pt-BR\YouTube\pt-BR_statistical.csv"
+print("step2_extractvttlist start")
+statistical_file = step2.run(inputdir,locals)
+# statistical_file = r"C:\Users\v-zhazhai\Desktop\TTS\It-IT\YouTube\it-IT_statistical.csv"
 data = pd.read_csv(statistical_file,sep="\t",encoding='utf8',low_memory=False)
 path_list = [str(x.replace('\\audioList.txt','')) for x in data["path"]]
 domain_list = list(set([x for x in data["domain"]]))

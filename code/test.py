@@ -25,32 +25,13 @@ def word():
         w.write(json.dumps(new_dict, indent=4).replace('\\\\', '\\'))
 
 def test():
-    my_keys = ['key_1', 'key_2', 'key_3']
-    source_dict = {'key_1': 'li', 'key_2': "wg", 'key_3': 'zh'}
-    outputfile=r"C:\Users\v-zhazhai\Downloads\Tier1_gender.json"
-    w=open(outputfile,'w',encoding='utf-8')
-    k, v = 'key_4', 'hello'
-    my_keys.insert(my_keys.index('key_1') + 1, k)
-    source_dict[k] = v
-    
-    w.write(json.dumps(voice, indent=4).replace('\\\\', '\\'))
-    new_dict = {}
-    for k in my_keys:
-        new_dict.update({k: source_dict[k]})
+    with open(r"C:\Users\v-zhazhai\Desktop\it-IT.bat",'r',encoding='utf8') as f:
+        for line in f.readlines():
+            os.system(line.replace('\n',''))
 
 def find_audioList(filelist_path,save_path,local):
     print()
-#     token = "?sv=2023-01-03&ss=btqf&srt=sco&st=2024-04-12T06%3A43%3A38Z&se=2024-04-13T06%3A43%3A38Z&sp=rl&sig=8UfQr%2B6H4SmmVuhx9sFbH6ROikUvAKBvCZHvRJpgXWM%3D"
-#     word2 = 'C:\Users\v-zhazhai\Toosl\code\Tool\merger_tar\azcopy.exe list "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/{}/{}" > "{}\{}.txt"'.format(local,token,filelist_path,local)
-#     os.system(word2)
-#     if not os.path.exists(save_path):
-#         os.makedirs(save_path, exist_ok=True)
-#     with open(filelist_path,'r',encoding='utf8') as f:
-#         for line in f.readlines():
-#             if "audioList.txt" in line:
-#                 line = line.split(";")[0].replace('INFO: ','')
-#                 word1 = 'C:/Users/v-zhazhai/Toosl/Tools/azcopy.exe copy "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/{}/{}{}" "C:/Users/v-zhazhai/Downloads/{}/{}" --overwrite="false"'.format(local,line,token,local,line)
-#                 os.system(word1)
+
 
 def merger_summary(summary_paths):
     for name in summary_paths:
@@ -74,8 +55,36 @@ def rename(filepath):
     for name in os.listdir(filepath):
         os.rename(os.path.join(filepath,name),os.path.join(filepath,name+".wav"))
 
+def succeeded_duration(files_path):
+    durations = []
+    for name in os.listdir(files_path):
+        f = str(open(os.path.join(files_path,name),'r',encoding='utf8').readlines()).split(',')
+        duration = float([x.split(':')[1] for x in f if "succeeded_duration" in x][0])
+        durations.append(duration)
+    print(str(round(sum(durations)/3600, 5)))
+
+
+def copy_files(list_path,files_path):
+    with open(list_path,'r',encoding='utf8') as f:
+        for line in f.readlines():
+            line = line.replace('\n','')
+            save_parth = os.path.join(files_path,line)
+            if not os.path.exists(save_parth):
+                os.makedirs(save_parth, exist_ok=True)
+            # save text
+            if not os.path.exists(os.path.join(save_parth,"text")):
+                os.makedirs(os.path.join(save_parth,"text"), exist_ok=True)
+            os.rename(os.path.join(files_path,"text",line+".txt"),os.path.join(save_parth,"text",line+".txt"))
+            # save audio
+            if not os.path.exists(os.path.join(save_parth,"audio")):
+                os.makedirs(os.path.join(save_parth,"audio"), exist_ok=True)
+            os.rename(os.path.join(files_path,"audio",line+".wav"),
+                      os.path.join(save_parth,"audio",line+".wav"))
+    
 
 if __name__ == "__main__":
+    # succeeded_duration(r"C:\Users\v-zhazhai\Desktop\stats_set_output")
+    copy_files(r"C:\Users\v-zhazhai\Downloads\test\1.txt",r"C:\Users\v-zhazhai\Downloads\test")
     # file_path = r"C:\Users\v-zhazhai\Downloads\de-DE.txt"
     # # file_path = sys.argv[1]
     # save_path = r"C:\Users\v-zhazhai\Downloads\de-DE"
@@ -86,4 +95,4 @@ if __name__ == "__main__":
     # dir_path = r"C:\Users\v-zhazhai\debug\richland\ttschunk_out2"
     # chunk_name = "chunk_9b4105557f469b239a8deecd2af1ef91_0"
     # upload_data(dir_path, chunk_name)
-    rename(r"C:\Users\v-zhazhai\debug\richland\chunks\chunk_en-au_EnAU2581MSMIVO_0")
+    # rename(r"C:\Users\v-zhazhai\debug\richland\chunks\chunk_en-au_EnAU2581MSMIVO_0")
