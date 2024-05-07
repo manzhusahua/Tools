@@ -24,10 +24,16 @@ def word():
             new_dict.update({k: voice[k]})
         w.write(json.dumps(new_dict, indent=4).replace('\\\\', '\\'))
 
-def test():
-    with open(r"C:\Users\v-zhazhai\Desktop\it-IT.bat",'r',encoding='utf8') as f:
+def wus2():
+    with open(r"C:\Users\v-zhazhai\Desktop\wus2.sh",'r',encoding='utf8') as f:
         for line in f.readlines():
-            os.system(line.replace('\n',''))
+            line = str(line.replace('\n',''))
+            os.system(line)
+def scus():
+    with open(r"C:\Users\v-zhazhai\Desktop\scus.sh",'r',encoding='utf8') as f:
+        for line in f.readlines():
+            line = str(line.replace('\n',''))
+            os.system(line)
 
 def find_audioList(filelist_path,save_path,local):
     print()
@@ -83,8 +89,11 @@ def copy_files(list_path,files_path):
     
 
 if __name__ == "__main__":
+    wus2()
+    scus()
+    # test()
     # succeeded_duration(r"C:\Users\v-zhazhai\Desktop\stats_set_output")
-    copy_files(r"C:\Users\v-zhazhai\Downloads\test\1.txt",r"C:\Users\v-zhazhai\Downloads\test")
+    # copy_files(r"C:\Users\v-zhazhai\Downloads\test\1.txt",r"C:\Users\v-zhazhai\Downloads\test")
     # file_path = r"C:\Users\v-zhazhai\Downloads\de-DE.txt"
     # # file_path = sys.argv[1]
     # save_path = r"C:\Users\v-zhazhai\Downloads\de-DE"
