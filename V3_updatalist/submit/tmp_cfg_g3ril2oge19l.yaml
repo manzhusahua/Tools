@@ -1,0 +1,56 @@
+code:
+  local_dir: /mnt/d/work/16_speech_inpainting/data_process_mls/extract_feature
+description: mls_feature_1
+environment:
+  image: pytorch:1.13.0-py38-cuda11.6-cudnn8-ubuntu20.04
+  registry: sramdevregistry.azurecr.io
+  setup:
+  - sleep 30
+  - sudo apt-get install rsync -y
+  - pip install --upgrade pip
+  - pip install --user mpi4py
+  - export NCCL_IB_DISABLE=0
+  - 'sudo apt-get -y install libsndfile1-dev && pip install numba soundfile librosa
+    && pip install get_f0-0.2.3-cp38-cp38-linux_x86_64.whl '
+  - sleep 60
+  username: tts-itp-user
+jobs:
+- command:
+  - set -exo pipefail
+  - python gpu_rapper.py & ./1.sh  --model-dir $$AMLT_OUTPUT_DIR --log-dir $$HOME/tensorboard/$$DLTS_JOB_ID/logs
+    || exit 1
+  - ITP_CODE_DIR="$$AMLT_OUTPUT_DIR/../../../amlt-code/$$AMLT_JOB_NAME"
+  - CREATE_CODE_DIR="mkdir -p $$ITP_CODE_DIR"
+  - COPY_CODE_DIR="cp -r $$AMLT_CODE_DIR/* $$ITP_CODE_DIR"
+  - if [ -z "$$OMPI_COMM_WORLD_RANK" ] || [ "$$OMPI_COMM_WORLD_RANK" = "0" ]; then
+    if [ -d "$$AMLT_CODE_DIR" ]; then echo $$CREATE_CODE_DIR; echo $$COPY_CODE_DIR;
+    $$CREATE_CODE_DIR; $$COPY_CODE_DIR; fi; fi || exit 1;
+  - ITP_LOGS_DIR="$$HOME/tensorboard/$$DLTS_JOB_ID/logs"
+  - CPOY_ITP_LOG="cp -r $$ITP_LOGS_DIR/* $$AMLT_LOGS_DIR"
+  - if [ -z "$$OMPI_COMM_WORLD_RANK" ] || [ "$$OMPI_COMM_WORLD_RANK" = "0" ]; then
+    if [ -d "$$ITP_LOGS_DIR" ] && [ -n "$$ITP_LOGS_DIR" ]; then echo $$CPOY_ITP_LOG;
+    $$CPOY_ITP_LOG; fi; fi || exit 1;
+  name: mls_feature_1
+  sku: 1x16G1-V100
+  sla_tier: Basic
+  submit_args:
+    constraints:
+    - tag: connectivityDomain
+      type: uniqueConstraint
+    env:
+      MKL_THREADING_LAYER: GNU
+storage:
+  data_blob:
+    container_name: philly-ipgsp
+    mount_dir: /datablob
+    mount_options:
+    - --file-cache-timeout-in-seconds=10000000
+    storage_account_name: stdstoragetts01scus
+  output:
+    container_name: philly-ipgsp
+    is_output: true
+    mount_dir: /modelblob
+    storage_account_name: exawattaiprmbtts01scus
+target:
+  name: spch-sing-ttsprod-sc
+  service: sing
