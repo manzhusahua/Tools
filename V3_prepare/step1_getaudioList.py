@@ -8,7 +8,7 @@ class STEP1():
         # self.locals = resource_dir_dict["--locals"]
     
     def step1_getaudioList(self,inputdir,locals):
-        token = r'?sv=2023-01-03&st=2024-04-30T07%3A39%3A57Z&se=2024-05-01T07%3A39%3A57Z&sr=c&sp=racwdxltf&sig=UPyPx0KXJ4xUjQ3V2nMmXGTmbYh9Kn38Ng6D4N20%2BuA%3D'
+        token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-05-07T05%3A34%3A36Z&se=2024-05-31T15%3A59%3A00Z&sp=rwdxftlacup&sig=b1t1LZTCF4za1Q5ZZBEBrFoXXrYbLY30vUMpGeqGIDE%3D'
 
         output_list = os.path.join(inputdir,locals+'.txt')
         word1 = 'C:/Users/v-zhazhai/Toosl/code/Tool/merger_tar/azcopy.exe list  "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/{}/{}" > "{}"'.format(locals,token,output_list)
@@ -25,7 +25,7 @@ class STEP1():
                 line = line.split(";")[0].replace("INFO: ",'')
                 if "audioList.txt" in line:
 
-                    token = r'?sv=2023-01-03&st=2024-04-29T02%3A12%3A52Z&se=2024-05-31T02%3A12%3A00Z&sr=c&sp=racwdxltf&sig=y4qplet74XqfhN9o46HzSMXj29clJcj6faAc%2B1L5fYI%3D'
+                    token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-05-07T05%3A34%3A36Z&se=2024-05-31T15%3A59%3A00Z&sp=rwdxftlacup&sig=b1t1LZTCF4za1Q5ZZBEBrFoXXrYbLY30vUMpGeqGIDE%3D'
 
                     audioList ='/'.join([locals,line])
                     output_audioList = os.path.join(save_path,line.replace('/','\\'))

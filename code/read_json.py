@@ -82,7 +82,7 @@ def read_info_transcription_json(input_file):
 
 if __name__ == "__main__":
 
-    read_info_transcription_json(r"C:\Users\v-zhazhai\debug\richland\F128\General\output\chunk\chunk_5f6318b14acc9b4ef84c5d5447b2ec48_0.info")
+    read_info_transcription_json(r"C:\Users\v-zhazhai\Desktop\xmly\chunk_ef68058639e8f0725f53db722c207e69_0.info")
     # input_path = r'C:\Users\v-zhazhai\debug\richland\F128\General\output\chunk'
     # for name in os.listdir(input_path):
     #     if ".richland_result" in name:

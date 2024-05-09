@@ -38,6 +38,10 @@ def scus():
 def find_audioList(filelist_path,save_path,local):
     print()
 
+def test(files_path):
+    with open(files_path,'r',encoding='utf8') as f:
+        for line in f.readlines():
+            os.system(line.replace("\n",''))
 
 def merger_summary(summary_paths):
     for name in summary_paths:
@@ -89,9 +93,9 @@ def copy_files(list_path,files_path):
     
 
 if __name__ == "__main__":
-    wus2()
-    scus()
-    # test()
+    # wus2()
+    # scus()
+    test(r"C:\Users\v-zhazhai\Desktop\11.sh")
     # succeeded_duration(r"C:\Users\v-zhazhai\Desktop\stats_set_output")
     # copy_files(r"C:\Users\v-zhazhai\Downloads\test\1.txt",r"C:\Users\v-zhazhai\Downloads\test")
     # file_path = r"C:\Users\v-zhazhai\Downloads\de-DE.txt"
