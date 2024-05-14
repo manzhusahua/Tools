@@ -9,3 +9,6 @@ stcvm-linux146 给你创建的账户名是 v-zhazhai，初始密码是 Password1
 
 sudo deluser v-huayuecao sudo
 groups v-zhazhai
+
+
+python ttschunk_validation.py--input_chunk_folder=/mnt/c/Users/v-zhazhai/Desktop/xmly/chunk--output_extracted_data_folder=/mnt/c/Users/v-zhazhai/Desktop/xmly/chunk_output
