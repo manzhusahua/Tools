@@ -5,7 +5,7 @@ workspace_name="zetta-prod-ws01-wus2"
 compute_target="ZettA-AML-Target"
 
 inputdir="/datablob/realisticttsdataset_v3/train/chunks"
-outputdir="/datablob/v-zhazhai/unified_dataplatform_v3/filelist/2024050801"
+outputdir="/datablob/v-zhazhai/unified_dataplatform_v3/filelist/2024051501"
 command="python run.py "$inputdir" "$outputdir
 
 experiment_name="v3_filelist"

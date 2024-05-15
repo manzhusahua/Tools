@@ -10,53 +10,75 @@ class UPDATALIST():
 
     def get_filelist(self,chunkpath,outputdir):
         list_path = outputdir
-        with open(os.path.join(list_path,"allfilelist.txt"),'w',encoding='utf8') as s:
+        with open(os.path.join(list_path,"all.txt"),'w',encoding='utf8') as s:
             for home, dirs, files in os.walk(chunkpath):
                 for filename in files:
                     if ".json" in filename and ".json.version" not in filename:
                         s.writelines(os.path.join(home, filename)+'\n')
-        return os.path.join(list_path,"allfilelist.txt")
+        return os.path.join(list_path,"all.txt")
     
-    def split_locals(self,tierlist,Tier_path):
-        locals = []
-        for line in tierlist:
-            n = [x for x in line.replace("\\",'/').split('/') if "tier" in x][0]
-            local = line.replace("\\",'/').split('/')[line.replace("\\",'/').split('/').index(n)+1]
-            if local not in locals:
-                locals.append(local)
-        for line in locals:
-            local_path = os.path.join(Tier_path,line)
-            local_word = [x for x in tierlist if line in x]
-            # print(local_path)
+    def split_datas(self,listfile,outputdir,tier,local,dataset):
+        f = open(listfile,'r',encoding='utf8').readlines()
+        datas = list(set([line.split("/")[line.split("/").index(dataset)+1] for line in f if dataset in line]))
+        for data in datas:
+            data_path = os.path.join(outputdir,tier,local,dataset,data)
+            if not os.path.exists(data_path):
+                os.makedirs(data_path, exist_ok=True)
+            dataset_files = os.path.join(data_path,"filelist.txt")
+            with open(dataset_files,'w',encoding='utf8') as s:
+                for line in f:
+                    if data in line:
+                        s.writelines(line)
+    
+    def split_dataset(self,listfile,outputdir,tier,local):
+        f = open(listfile,'r',encoding='utf8').readlines()
+        datasets = list(set([line.split("/")[line.split("/").index(local)+1] for line in f]))
+        for dataset in datasets:
+            dataset_path = os.path.join(outputdir,tier,local,dataset)
+            if not os.path.exists(dataset_path):
+                os.makedirs(dataset_path, exist_ok=True)
+            dataset_files = os.path.join(dataset_path,"all.txt")
+            with open(dataset_files,'w',encoding='utf8') as s:
+                for line in f:
+                    if dataset in line:
+                        s.writelines(line)
+            try:
+                self.split_datas(dataset_files,outputdir,tier,local,dataset)
+            except Exception as e:
+                errlocal = "_".join([tier,local])
+                print(f"Failed to split {errlocal} dataset {e}")
+   
+    def split_locals(self,listfile,outputdir,tier):
+        f = open(listfile,'r',encoding='utf8').readlines()
+        locals = list(set([line.split("/")[line.split("/").index(tier)+1] for line in f]))
+        for local in locals:
+            local_path = os.path.join(outputdir,tier,local)
             if not os.path.exists(local_path):
                 os.makedirs(local_path, exist_ok=True)
-            with open(os.path.join(local_path,"allfilelist.txt"),'w',encoding='utf8') as s:
-                for line in local_word:
-                    line = line.replace('\n','')
-                    s.writelines(line+'\n')
-            s.close()
+            local_files = os.path.join(local_path,"all.txt")
+            with open(local_files,'w',encoding='utf8') as s:
+                for line in f:
+                    if local in line:
+                        s.writelines(line)
+            self.split_dataset(local_files,outputdir,tier,local)
 
-    def split_Tier(self,listfile):
-        save_path = os.path.split(listfile)[0]
-        f = open(listfile,'r',encoding='utf8')
-        word = f.readlines()
+    def split_Tier(self,listfile,outputdir):
+        f = open(listfile,'r',encoding='utf8').readlines()
+        Tiers = list(set([line.split("/")[line.split("/").index("chunks")+1] for line in f]))
+        for tier in Tiers:
+            tier_path = os.path.join(outputdir,tier)
+            if not os.path.exists(tier_path):
+                os.makedirs(tier_path, exist_ok=True)
+            tier_files = os.path.join(tier_path,"all.txt")
+            with open(tier_files,'w',encoding='utf8') as s:
+                for line in f:
+                    if tier in line:
+                        s.writelines(line)
+            self.split_locals(tier_files,outputdir,tier)
 
-        n= 1
-        while n<=3:
-            tier = [x for x in word if "tier{}".format(str(n)) in x]
-            Tier_path = os.path.join(save_path,"tier{}".format(str(n)))
-            if not os.path.exists(Tier_path):
-                os.makedirs(Tier_path, exist_ok=True)
-            with open(os.path.join(Tier_path,"allfilelist.txt"),'w',encoding='utf8') as s:
-                s.writelines(tier)
-            s.close()
-            self.split_locals(tier,Tier_path)
-            n+=1
-                
-
-    def run(self,chunkpath,outputdir):
-        listfile = self.get_filelist(chunkpath,outputdir)
-        self.split_Tier(listfile)
+    def run(self,inputdir,outputdir):
+        listfile = self.get_filelist(inputdir,outputdir)
+        self.split_Tier(listfile,outputdir)
 
 
 CHUNK_INPUT_STEP = None
@@ -73,10 +95,8 @@ def run(mini_batch):
     return CHUNK_INPUT_STEP.prs_step_run(mini_batch)
 
 if __name__ == "__main__":
-    # inputdir = r"C:\Users\v-zhazhai\Toosl\updata_list\realisticttsdataset_v3\train\chunks"
-    # outputdir = r"C:\Users\v-zhazhai\Toosl\updata_list\realisticttsdataset_v3\train"
-    # tierlist = [r"C:\Users\v-zhazhai\Toosl\updata_list\realisticttsdataset_v3\train\chunks\tier2\ar-eg\ttsdata\ArEGHoda\chunk_ar-eg_ArEGHoda_0.json\n",r"C:\Users\v-zhazhai\Toosl\updata_list\realisticttsdataset_v3\train\chunks\tier2\ar-eg\ttsdata\ArEGHoda\chunk_ar-eg_ArEGHoda_1.json\n"]
+    # inputdir = r"C:\Users\v-zhazhai\Downloads\realisticttsdataset_v3\train"
+    # outputdir = r"C:\Users\v-zhazhai\Downloads\realisticttsdataset_v3\train"
 
-    # Tier_path = r"C:\Users\v-zhazhai\Toosl\updata_list\realisticttsdataset_v3\train\dataset\tier2"
     UpdataList = UPDATALIST()
     # UpdataList.run(inputdir,outputdir)

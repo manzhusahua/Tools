@@ -11,7 +11,7 @@ def not_fold(speaker,suncoumt,save_parth):
                 os.mkdir(os.path.join(save_parth,str(n).zfill(5)))
                 with open(os.path.join(save_parth,str(n).zfill(5),"registry.csv"),'w',encoding='utf8') as f:
                         f.writelines("speaker|locale|style|metadata_path"+"\n")
-                        f.writelines(speaker+"|en-us|general|../metadata_"+str(n)+".csv\n")
+                        f.writelines(speaker+"|zh-cn|other|../metadata_"+str(n)+".csv\n")
                 n+=1
 def has_folder(speaker,metadatafloder):
         m=0
@@ -24,4 +24,4 @@ def has_folder(speaker,metadatafloder):
 
 if __name__ == "__main__":
         # has_folder("EnUSLibri-RTTS",r"C:\Users\v-zhazhai\Desktop\merged_more_books_with_small_metadata_updata_sid_context_speaker2")
-        not_fold("Jessa",9,r"C:\Users\v-zhazhai\Downloads")
+        not_fold("ZhCNF128",1,r"C:\Users\v-zhazhai\Downloads")

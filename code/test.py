@@ -2,6 +2,9 @@
 import json
 import os,sys
 import shutil
+import wave
+import csv
+import pandas as pd
 
 def word():
     inputfile=r"C:\Users\v-zhazhai\Downloads\Tier1.json"
@@ -91,13 +94,62 @@ def copy_files(list_path,files_path):
             os.rename(os.path.join(files_path,"audio",line+".wav"),
                       os.path.join(save_parth,"audio",line+".wav"))
     
+def copy_files1(files_path):
+    files_list = [x.replace('.wav','') for x in os.listdir(files_path) if ".wav" in x]
+    for line in files_list:
+        save_parth = os.path.join(files_path,line)
+        if not os.path.exists(save_parth):
+            os.makedirs(save_parth, exist_ok=True)
+            os.renames(os.path.join(files_path,line+".txt"),os.path.join(save_parth,line+".txt"))
+            os.renames(os.path.join(files_path,line+".wav"),os.path.join(save_parth,line+".wav"))
+
+def get_vtt(files_path):
+    word = "WEBVTT\nKind: captions\nLanguage: en\n\n"
+    files_list = [x for x in os.listdir(files_path)]
+    for name in files_list:
+        wav_name = os.path.join(files_path,name,name+'.wav')
+        trans_name = os.path.join(files_path,name,name+'.txt')
+        vtt = os.path.join(files_path,name,name+'.vtt')
+        trans = open(trans_name,'r',encoding='utf8').readlines()[0]
+        f = wave.open(wav_name, 'rb')
+        time_count = f.getparams().nframes/f.getparams().framerate
+        m = time_count//60%60
+        h = time_count//3600
+        s = time_count-h*3600-m*60
+        end_time = "{:0>2}:{:0>2}:{:0>2}".format(h,m,'%.3f'%s)
+        with open(vtt,'w',encoding='utf8') as s:
+            s.writelines(word)
+            s.writelines("00:00:00.000 --> "+str(end_time)+'\n')
+            s.writelines(trans)
+
+def prepare(files_path):
+    data_frame = None
+    for name in os.listdir(files_path):
+        text = open(os.path.join(files_path,name),'r',encoding='utf8').readlines()[0].replace('\n','')
+        row_values = {"wav": [name.replace('.txt','')],
+                    "text": [text],
+                    "textless": ["false"],
+                    "human_voice": ["true"],
+                    "multispeaker_detect_score": ["-9999"],
+                        }
+        if data_frame is None:
+            data_frame = pd.DataFrame(row_values)
+        else:
+            newdata = pd.DataFrame(row_values)
+            data_frame = pd.concat([data_frame, newdata], axis=0, ignore_index=True)
+    data_frame.to_csv(
+                files_path+'.csv', sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_NONE
+            )
+
+
 
 if __name__ == "__main__":
-    # wus2()
-    # scus()
-    test(r"C:\Users\v-zhazhai\Desktop\11.sh")
+    # get_vtt(r"C:\Users\v-zhazhai\debug\audio_text_segnment\wave")
+    wus2()
+    scus()
+    # test(r"C:\Users\v-zhazhai\Desktop\11.sh")
     # succeeded_duration(r"C:\Users\v-zhazhai\Desktop\stats_set_output")
-    # copy_files(r"C:\Users\v-zhazhai\Downloads\test\1.txt",r"C:\Users\v-zhazhai\Downloads\test")
+    # prepare(r"C:\Users\v-zhazhai\debug\audio_text_segnment\test")
     # file_path = r"C:\Users\v-zhazhai\Downloads\de-DE.txt"
     # # file_path = sys.argv[1]
     # save_path = r"C:\Users\v-zhazhai\Downloads\de-DE"

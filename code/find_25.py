@@ -15,7 +15,7 @@ def updat_sid_file(metadata_files,save_files,speaker_id):
         for j in audio_book_jie:
             for m in audio_book_chai:
                 for x in data1['sid']:
-                    if "_".join([str(i),str(j).zfill(8),str(m)]) in x:
+                    if "_".join([str(i),str(j).zfill(11),str(m)]) in x:
                         save_data = save_data._append(data1.iloc[int(list(data1['sid']).index(x))])
     save_data['speaker'] = save_data.apply(lambda x: speaker_id, axis=1)
     save_data.to_csv(save_files,sep="|",encoding='utf8',index=False)
@@ -34,9 +34,9 @@ def find_25(metadata_files):
 
 
 if __name__ == "__main__":
-    files = r"C:\Users\v-zhazhai\Desktop\metadata_Zh-TWMale_general.csv"
-    speaker_id = "ZhTWMale"
+    files = r"C:\Users\v-zhazhai\Downloads\metadata_1.csv"
+    speaker_id = "ZhCNM400"
     updat_sid_file(files,files.replace(".csv","_v1.csv"),speaker_id)
-    os.remove(files)
-    os.renames(files.replace(".csv","_v1.csv"),files)
+    # os.remove(files)
+    # os.renames(files.replace(".csv","_v1.csv"),files)
     # find_25(files)
