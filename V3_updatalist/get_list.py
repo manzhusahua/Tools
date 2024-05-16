@@ -9,13 +9,14 @@ class UPDATALIST():
         super().__init__()
 
     def get_filelist(self,chunkpath,outputdir):
-        list_path = outputdir
-        with open(os.path.join(list_path,"all.txt"),'w',encoding='utf8') as s:
+        if not os.path.exists(outputdir):
+            os.makedirs(outputdir, exist_ok=True)
+        with open(os.path.join(outputdir,"all.txt"),'w',encoding='utf8') as s:
             for home, dirs, files in os.walk(chunkpath):
                 for filename in files:
                     if ".json" in filename and ".json.version" not in filename:
                         s.writelines(os.path.join(home, filename)+'\n')
-        return os.path.join(list_path,"all.txt")
+        return os.path.join(outputdir,"all.txt")
     
     def split_datas(self,listfile,outputdir,tier,local,dataset):
         f = open(listfile,'r',encoding='utf8').readlines()
