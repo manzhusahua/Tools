@@ -5,9 +5,28 @@ import shutil
 import wave
 import csv
 import pandas as pd
+import zipfile
 import xml.dom.minidom
 
 
+def zipDir(dirpath, outFullName):
+    """
+    压缩指定文件夹
+    :param dirpath: 目标文件夹路径
+    :param outFullName: 压缩文件保存路径+xxxx.zip
+    :return: 无
+    """
+    zip = zipfile.ZipFile(outFullName, "w", zipfile.ZIP_DEFLATED)
+    for path, dirnames, filenames in os.walk(dirpath):
+        # 去掉目标跟路径，只对目标文件夹下边的文件及文件夹进行压缩
+        fpath = path.replace(dirpath, '')
+ 
+        for filename in filenames:
+            print(filename)
+            zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
+    zip.close()
+
+    shutil.rmtree(dirpath, ignore_errors=True)
 
 def word():
     inputfile=r"C:\Users\v-zhazhai\Downloads\Tier1.json"
@@ -125,10 +144,10 @@ def get_vtt(files_path):
             s.writelines("00:00:00.000 --> "+str(end_time)+'\n')
             s.writelines(trans)
 
-def prepare(files_path):
+def prepare_csv(files_path,output):
     data_frame = None
     for name in os.listdir(files_path):
-        text = open(os.path.join(files_path,name),'r',encoding='utf8').readlines()[0].replace('\n','')
+        text = open(os.path.join(files_path,name,"text",name+".txt"),'r',encoding='utf8').readlines()[0].replace('\n','')
         row_values = {"wav": [name.replace('.txt','')],
                     "text": [text],
                     "textless": ["false"],
@@ -141,8 +160,15 @@ def prepare(files_path):
             newdata = pd.DataFrame(row_values)
             data_frame = pd.concat([data_frame, newdata], axis=0, ignore_index=True)
     data_frame.to_csv(
-                files_path+'.csv', sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_NONE
+                os.path.join(output,"metadata.csv"), sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_NONE,escapechar='|'
             )
+def prepare_audio(files_path):
+    if not os.path.exists(files_path+"_audio"):
+        os.makedirs(files_path+"_audio", exist_ok=True)
+    for name in os.listdir(files_path):
+        audio = os.path.join(files_path,name,"audio",name+".wav")
+        
+        os.renames(os.path.join(files_path,name,"audio",name+".wav"),os.path.join(files_path+"_audio",name+".wav"))
 
 # def get_fielwave(files,xmlfiles):
 #     f = open(files,'r',encoding='utf-16-le').readlines()
@@ -169,13 +195,15 @@ def get_fielwave(files1,files2):
     id1 = [x for x in open(files1,'r',encoding='utf8').readlines()]
 
 if __name__ == "__main__":
-    get_fielwave(r"C:\Users\v-zhazhai\Downloads\M400\2_zongwen.txt",r"C:\Users\v-zhazhai\Downloads\M400\Script.xml")
+    # get_fielwave(r"C:\Users\v-zhazhai\Downloads\M400\2_zongwen.txt",r"C:\Users\v-zhazhai\Downloads\M400\Script.xml")
     # get_vtt(r"C:\Users\v-zhazhai\debug\audio_text_segnment\wave")
     # wus2()
     # scus()
     # test(r"C:\Users\v-zhazhai\Desktop\11.sh")
     # succeeded_duration(r"C:\Users\v-zhazhai\Desktop\stats_set_output")
-    # prepare(r"C:\Users\v-zhazhai\debug\audio_text_segnment\test")
+    prepare_csv(r"C:\Users\v-zhazhai\debug\xml\part5",r"C:\Users\v-zhazhai\debug\xml")
+    prepare_audio(r"C:\Users\v-zhazhai\debug\xml\part5")
+    zipDir(r"C:\Users\v-zhazhai\debug\xml\part5_audio", r"C:\Users\v-zhazhai\debug\xml\waves.zip")
     # file_path = r"C:\Users\v-zhazhai\Downloads\de-DE.txt"
     # # file_path = sys.argv[1]
     # save_path = r"C:\Users\v-zhazhai\Downloads\de-DE"
