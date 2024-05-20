@@ -5,6 +5,9 @@ import shutil
 import wave
 import csv
 import pandas as pd
+import xml.dom.minidom
+
+
 
 def word():
     inputfile=r"C:\Users\v-zhazhai\Downloads\Tier1.json"
@@ -141,12 +144,35 @@ def prepare(files_path):
                 files_path+'.csv', sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_NONE
             )
 
+# def get_fielwave(files,xmlfiles):
+#     f = open(files,'r',encoding='utf-16-le').readlines()
+#     i = [x for i,x in enumerate(f) if x.find("3070000953") != -1]
+#     # 打开XML文档
+#     dom = xml.dom.minidom.parse(xmlfiles)
 
+#     # 得到文档元素对象
+#     root = dom.documentElement
+#     # # 获取子标签名字
+#     bb = root.getElementsByTagName('si')
+#     with open(files.replace('.txt',"_v1.txt"),'w',encoding='utf-16-le') as s:
+#         for id in [x.split('\t')[0] for x in f]:
+#             if id not in [str(x.getAttribute("id")) for x in bb]:
+#                 print(id)
+        
+        # for line in bb:
+        #     iline.getAttribute("id")
+        #     if len([x for i,x in enumerate(f) if x.find(str(i)) != -1]) !=1:
+        #         s.writelines()
+
+def get_fielwave(files1,files2):
+
+    id1 = [x for x in open(files1,'r',encoding='utf8').readlines()]
 
 if __name__ == "__main__":
+    get_fielwave(r"C:\Users\v-zhazhai\Downloads\M400\2_zongwen.txt",r"C:\Users\v-zhazhai\Downloads\M400\Script.xml")
     # get_vtt(r"C:\Users\v-zhazhai\debug\audio_text_segnment\wave")
-    wus2()
-    scus()
+    # wus2()
+    # scus()
     # test(r"C:\Users\v-zhazhai\Desktop\11.sh")
     # succeeded_duration(r"C:\Users\v-zhazhai\Desktop\stats_set_output")
     # prepare(r"C:\Users\v-zhazhai\debug\audio_text_segnment\test")
