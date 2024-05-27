@@ -6,8 +6,8 @@ from step4_dump_json import step4
 from step5_UpdataBlob import step5
 import pandas as pd
 
-locals = "ja-JP"
-inputdir = r"C:\Users\v-zhazhai\Desktop\TTS\ja-JP\YouTube"
+locals = "zh-CN"
+inputdir = r"C:\Users\v-zhazhai\Desktop\TTS\zh-CN\YouTube"
 if not os.path.exists(inputdir):
     os.makedirs(inputdir, exist_ok=True)
 

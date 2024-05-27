@@ -28,7 +28,7 @@ class UPDATALIST():
             dataset_files = os.path.join(data_path,"filelist.txt")
             with open(dataset_files,'w',encoding='utf8') as s:
                 for line in f:
-                    if data in line:
+                    if '/'.join([tier,local,dataset,data])+'/' in line:
                         s.writelines(line)
     
     def split_dataset(self,listfile,outputdir,tier,local):
@@ -41,13 +41,14 @@ class UPDATALIST():
             dataset_files = os.path.join(dataset_path,"all.txt")
             with open(dataset_files,'w',encoding='utf8') as s:
                 for line in f:
-                    if dataset in line:
+                    if '/'.join([tier,local,dataset])+"/" in line :
                         s.writelines(line)
             try:
                 self.split_datas(dataset_files,outputdir,tier,local,dataset)
             except Exception as e:
                 errlocal = "_".join([tier,local])
                 print(f"Failed to split {errlocal} dataset {e}")
+                break
    
     def split_locals(self,listfile,outputdir,tier):
         f = open(listfile,'r',encoding='utf8').readlines()
@@ -78,7 +79,8 @@ class UPDATALIST():
             self.split_locals(tier_files,outputdir,tier)
 
     def run(self,inputdir,outputdir):
-        listfile = self.get_filelist(inputdir,outputdir)
+        listfile = "/mnt/c/Users/v-zhazhai/Downloads/all_v1_v1_clean.txt"
+        # listfile = self.get_filelist(inputdir,outputdir)
         self.split_Tier(listfile,outputdir)
 
 
@@ -96,8 +98,9 @@ def run(mini_batch):
     return CHUNK_INPUT_STEP.prs_step_run(mini_batch)
 
 if __name__ == "__main__":
-    # inputdir = r"C:\Users\v-zhazhai\Downloads\realisticttsdataset_v3\train"
-    # outputdir = r"C:\Users\v-zhazhai\Downloads\realisticttsdataset_v3\train"
-
+    inputdir = "/mnt/c/Users/v-zhazhai/Downloads/realisticttsdataset_v3_scu/train"
+    outputdir = "/mnt/c/Users/v-zhazhai/Downloads/realisticttsdataset_v3_scu/train"
+    if not os.path.exists(outputdir):
+        os.makedirs(outputdir, exist_ok=True)
     UpdataList = UPDATALIST()
-    # UpdataList.run(inputdir,outputdir)
+    UpdataList.run(inputdir,outputdir)

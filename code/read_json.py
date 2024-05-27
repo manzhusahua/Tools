@@ -78,21 +78,14 @@ def read_info_transcription_json(input_file):
     shutil.rmtree(file_name+ "_files")
     os.remove(input_file+'.tar')
 
+def get_json_duration(input_file):
+    with open(input_file,'r',encoding='utf8') as file:
+        data = json.load(file)
+        durations = [line["duration"] for line in data['fileInfo']]
+    print(str(round(sum(durations)/3600, 5)))
 
 
 if __name__ == "__main__":
 
-    read_info_transcription_json(r"C:\Users\v-zhazhai\Desktop\xmly\chunk_ef68058639e8f0725f53db722c207e69_0.info")
-    # input_path = r'C:\Users\v-zhazhai\debug\richland\F128\General\output\chunk'
-    # for name in os.listdir(input_path):
-    #     if ".richland_result" in name:
-    #         input_file = os.path.join(input_path,name)
-    #         read_richland_result_json(input_file)
-    #     if ".whisper_transcription" in name:
-    #         input_file = os.path.join(input_path,name)
-    #         # print(input_file)
-    #         read_whisper_transcription_json(input_file)
-    #     if ".info" in name:
-    #         input_file = os.path.join(input_path,name)
-    #         # print(input_file)
-    #         read_info_transcription_json(input_file)
+    get_json_duration(r"C:\Users\v-zhazhai\Downloads\audio_file_set.json")
+    

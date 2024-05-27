@@ -7,7 +7,8 @@ import csv
 import pandas as pd
 import zipfile
 import xml.dom.minidom
-
+import codecs
+import chardet
 
 def zipDir(dirpath, outFullName):
     """
@@ -60,13 +61,17 @@ def scus():
             line = str(line.replace('\n',''))
             os.system(line)
 
-def find_audioList(filelist_path,save_path,local):
-    print()
+def blob(shfiles):
+    with open(shfiles,'r',encoding='utf8') as f:
+        for line in f.readlines():
+            line = str(line.replace('\n',''))
+            os.system(line)
 
 def test(files_path):
-    with open(files_path,'r',encoding='utf8') as f:
+    with open(files_path,'r',encoding='utf8') as f,open(files_path.replace('.txt','_v1.txt'),'w',encoding='utf8') as s:
         for line in f.readlines():
-            os.system(line.replace("\n",''))
+            if ".json\n" in line:
+                s.writelines("/datablob/realisticttsdataset_v3/train/chunks/"+line)
 
 def merger_summary(summary_paths):
     for name in summary_paths:
@@ -169,6 +174,16 @@ def prepare_audio(files_path):
         audio = os.path.join(files_path,name,"audio",name+".wav")
         
         os.renames(os.path.join(files_path,name,"audio",name+".wav"),os.path.join(files_path+"_audio",name+".wav"))
+def prepare_text(files_path):
+    if not os.path.exists(files_path+"_audio"):
+        os.makedirs(files_path+"_audio", exist_ok=True)
+    for name in os.listdir(files_path):
+        content=codecs.open(os.path.join(files_path,name),'rb').read()
+        word = open(os.path.join(files_path,name),'r',encoding=chardet.detect(content)['encoding']).readlines()
+        for line in word:
+            filename = line.split('\t')[0]
+            with open(os.path.join(files_path+"_audio",filename+'.txt'),'w',encoding='utf8') as s:
+                s.writelines(line.split('\t')[-1])
 
 # def get_fielwave(files,xmlfiles):
 #     f = open(files,'r',encoding='utf-16-le').readlines()
@@ -195,23 +210,5 @@ def get_fielwave(files1,files2):
     id1 = [x for x in open(files1,'r',encoding='utf8').readlines()]
 
 if __name__ == "__main__":
-    # get_fielwave(r"C:\Users\v-zhazhai\Downloads\M400\2_zongwen.txt",r"C:\Users\v-zhazhai\Downloads\M400\Script.xml")
-    # get_vtt(r"C:\Users\v-zhazhai\debug\audio_text_segnment\wave")
-    # wus2()
-    # scus()
-    # test(r"C:\Users\v-zhazhai\Desktop\11.sh")
-    # succeeded_duration(r"C:\Users\v-zhazhai\Desktop\stats_set_output")
-    prepare_csv(r"C:\Users\v-zhazhai\debug\xml\part5",r"C:\Users\v-zhazhai\debug\xml")
-    prepare_audio(r"C:\Users\v-zhazhai\debug\xml\part5")
-    zipDir(r"C:\Users\v-zhazhai\debug\xml\part5_audio", r"C:\Users\v-zhazhai\debug\xml\waves.zip")
-    # file_path = r"C:\Users\v-zhazhai\Downloads\de-DE.txt"
-    # # file_path = sys.argv[1]
-    # save_path = r"C:\Users\v-zhazhai\Downloads\de-DE"
-    # # save_path = sys.argv[2]
-    # summary_paths = find_audioList(file_path,save_path)
-    # merger_summary(summary_paths)
-
-    # dir_path = r"C:\Users\v-zhazhai\debug\richland\ttschunk_out2"
-    # chunk_name = "chunk_9b4105557f469b239a8deecd2af1ef91_0"
-    # upload_data(dir_path, chunk_name)
-    # rename(r"C:\Users\v-zhazhai\debug\richland\chunks\chunk_en-au_EnAU2581MSMIVO_0")
+    shfiles = r"C:\Users\v-zhazhai\Downloads\all_v1.txt"
+    test(shfiles)

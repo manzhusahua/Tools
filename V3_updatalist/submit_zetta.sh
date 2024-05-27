@@ -5,11 +5,11 @@ workspace_name="zetta-prod-ws01-wus2"
 compute_target="ZettA-AML-Target"
 
 inputdir="/datablob/realisticttsdataset_v3/train/chunks"
-outputdir="/datablob/v-zhazhai/unified_dataplatform_v3/filelist/2024051501"
+outputdir="/datablob/v-zhazhai/unified_dataplatform_v3/filelist/2024052401"
 command="python run.py "$inputdir" "$outputdir
 
 experiment_name="v3_filelist"
-display_name="v3_filelist_20240508"
+display_name="v3_filelist_20240524"
 
 "C:\Users\v-zhazhai\Toosl\miniconda3\envs\use\python.exe" -u submit/zetta_submit.py \
   --workspace-name "${workspace_name}" \
