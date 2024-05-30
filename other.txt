@@ -11,4 +11,4 @@ sudo deluser v-huayuecao sudo
 groups v-zhazhai
 
 
-python ttschunk_validation.py--input_chunk_folder=/mnt/c/Users/v-zhazhai/Desktop/xmly/chunk--output_extracted_data_folder=/mnt/c/Users/v-zhazhai/Desktop/xmly/chunk_output
+python /mnt/c/Users/v-zhazhai/Environment/CookingSpeech/audio_text_segmetation/TorchTTSDataProcessing/cookingspeech/step/ttschunk_validation.py --input_chunk_folder=/mnt/c/Users/v-zhazhai/Downloads/en-us/ASR --output_extracted_data_folder=/mnt/c/Users/v-zhazhai/Downloads/en-us/chunk_output
