@@ -7,8 +7,7 @@ import csv
 import pandas as pd
 import zipfile
 import xml.dom.minidom
-import codecs
-import chardet
+from files_data_process.read_files import READFILE
 
 def zipDir(dirpath, outFullName):
     """
@@ -67,11 +66,20 @@ def blob(shfiles):
             line = str(line.replace('\n',''))
             os.system(line)
 
-def test(files_path):
-    with open(files_path,'r',encoding='utf8') as f,open(files_path.replace('.txt','_v1.txt'),'w',encoding='utf8') as s:
-        for line in f.readlines():
-            if ".json\n" in line:
-                s.writelines("/datablob/realisticttsdataset_v3/train/chunks/"+line)
+def test(files_path,save_path):
+    if not os.path.exists(save_path):
+        os.makedirs(save_path, exist_ok=True)
+    for name in os.listdir(files_path):
+        file_name = os.path.join(files_path,name)
+        save_file_path =  os.path.join(save_path,str(int(name.replace('.txt',''))).zfill(3)+".txt")
+
+        word = READFILE().read_file(file_name)
+        with open(save_file_path,'w',encoding='utf8') as s:
+            for line in word:
+                s.writelines(line.split('\t')[-1].replace('\n',''))
+            s.writelines("\n")
+        s.close
+
 
 def merger_summary(summary_paths):
     for name in summary_paths:
@@ -178,8 +186,7 @@ def prepare_text(files_path):
     if not os.path.exists(files_path+"_audio"):
         os.makedirs(files_path+"_audio", exist_ok=True)
     for name in os.listdir(files_path):
-        content=codecs.open(os.path.join(files_path,name),'rb').read()
-        word = open(os.path.join(files_path,name),'r',encoding=chardet.detect(content)['encoding']).readlines()
+        READFILE().read_file(os.path.join(files_path,name))
         for line in word:
             filename = line.split('\t')[0]
             with open(os.path.join(files_path+"_audio",filename+'.txt'),'w',encoding='utf8') as s:
@@ -210,5 +217,6 @@ def get_fielwave(files1,files2):
     id1 = [x for x in open(files1,'r',encoding='utf8').readlines()]
 
 if __name__ == "__main__":
-    shfiles = r"C:\Users\v-zhazhai\Downloads\all_v1.txt"
-    test(shfiles)
+    shfiles = r"C:\Users\v-zhazhai\Downloads\TextScripts"
+    save_path = r"C:\Users\v-zhazhai\Downloads\TextScripts_v1"
+    test(shfiles,save_path)
