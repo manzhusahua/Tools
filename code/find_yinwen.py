@@ -3,6 +3,8 @@ import os
 import sys
 import codecs 
 import chardet
+import csv
+
 
 files = sys.argv[1]
 name = os.path.split(files)[-1]

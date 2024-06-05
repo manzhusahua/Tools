@@ -217,6 +217,5 @@ def get_fielwave(files1,files2):
     id1 = [x for x in open(files1,'r',encoding='utf8').readlines()]
 
 if __name__ == "__main__":
-    shfiles = r"C:\Users\v-zhazhai\Downloads\TextScripts"
-    save_path = r"C:\Users\v-zhazhai\Downloads\TextScripts_v1"
-    test(shfiles,save_path)
+    wus2()
+    scus()

@@ -30,6 +30,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     merger_dir = MERGERDIR()
 
-    inpudir = r"C:\Users\v-zhazhai\Downloads\filenames_set_output"
+    inpudir = r"C:\Users\v-zhazhai\Desktop\filenames_set_output"
     outputdir = r"C:\Users\v-zhazhai\Downloads\zh-CN\zhCN_140k"
     merger_dir.merger_files(inpudir)

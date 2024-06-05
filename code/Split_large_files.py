@@ -3,8 +3,8 @@ import os
 
 
 # 读取csv文件
-df = pd.read_csv(r"C:\Users\v-zhazhai\Desktop\metadata_Zh-TWMale_general.csv", sep='|', encoding='utf-8')
-save_path = r"C:\Users\v-zhazhai\Desktop\merged_more_books_with_small_metadata"
+df = pd.read_csv(r"C:\Users\v-zhazhai\Downloads\metadata_Jessa_general.csv", sep='|', encoding='utf-8')
+save_path = r"C:\Users\v-zhazhai\Downloads\metadata_Jessa_general"
 if not os.path.exists(save_path):
     os.makedirs(save_path, exist_ok=True)
 # 获取文件总行数
