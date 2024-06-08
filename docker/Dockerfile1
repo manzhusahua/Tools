@@ -1,0 +1,13 @@
+FROM centos
+MAINTAINER zhaohui<15149200717.163.com>
+ENV MYPATH /user/zhaohui
+WORKDIR $MYPATH
+
+RUN yun -y install vim
+RUN yun -y install ll
+
+EXPOSE 80
+
+CMD echo $MYPATH
+CMD echo "___end___"
+CMD /bin/bash
