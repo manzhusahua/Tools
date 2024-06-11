@@ -10,5 +10,7 @@ stcvm-linux146 给你创建的账户名是 v-zhazhai，初始密码是 Password1
 sudo deluser v-huayuecao sudo
 groups v-zhazhai
 
+az login --use-device-code
+
 
 python /mnt/c/Users/v-zhazhai/Environment/CookingSpeech/audio_text_segmetation/TorchTTSDataProcessing/cookingspeech/step/ttschunk_validation.py --input_chunk_folder=/mnt/c/Users/v-zhazhai/Downloads/en-us/ASR --output_extracted_data_folder=/mnt/c/Users/v-zhazhai/Downloads/en-us/chunk_output

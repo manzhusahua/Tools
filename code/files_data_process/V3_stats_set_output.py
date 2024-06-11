@@ -1,4 +1,4 @@
-import os
+import os,sys
 import json
 
 class JSONREAD():
@@ -38,6 +38,7 @@ def run(mini_batch):
 if __name__ == "__main__":
     json_read = JSONREAD()
 
-    json_dir = r"C:\Users\v-zhazhai\Desktop\stats_set_output"
+    # json_dir = r"C:\Users\v-zhazhai\Desktop\stats_set_output"
+    json_dir = sys.argv[1]
     json_read.run(json_dir)
     # json_read.get_ttschunk_successfull_example(r"C:\Users\v-zhazhai\Desktop\stats_set_output\stats_minibatch_10020_0.json")
