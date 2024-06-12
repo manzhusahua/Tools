@@ -60,7 +60,7 @@ class UPDATALIST():
             local_files = os.path.join(local_path,"all.txt")
             with open(local_files,'w',encoding='utf8') as s:
                 for line in f:
-                    if local in line:
+                    if '/'.join([tier,local])+"/" in line:
                         s.writelines(line)
             self.split_dataset(local_files,outputdir,tier,local)
 
@@ -79,7 +79,7 @@ class UPDATALIST():
             self.split_locals(tier_files,outputdir,tier)
 
     def run(self,inputdir,outputdir):
-        listfile = "/mnt/c/Users/v-zhazhai/Downloads/all_v1_v1_clean.txt"
+        listfile = "/mnt/c/Users/v-zhazhai/Downloads/all.txt"
         # listfile = self.get_filelist(inputdir,outputdir)
         self.split_Tier(listfile,outputdir)
 
@@ -99,7 +99,7 @@ def run(mini_batch):
 
 if __name__ == "__main__":
     inputdir = "/mnt/c/Users/v-zhazhai/Downloads/realisticttsdataset_v3_scu/train"
-    outputdir = "/mnt/c/Users/v-zhazhai/Downloads/realisticttsdataset_v3_scu/train"
+    outputdir = "/mnt/c/Users/v-zhazhai/Downloads/realisticttsdataset_v3/train"
     if not os.path.exists(outputdir):
         os.makedirs(outputdir, exist_ok=True)
     UpdataList = UPDATALIST()
