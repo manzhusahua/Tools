@@ -74,7 +74,7 @@ class UPDATALIST():
             tier_files = os.path.join(tier_path,"all.txt")
             with open(tier_files,'w',encoding='utf8') as s:
                 for line in f:
-                    if tier in line:
+                    if "/"+tier+"/" in line:
                         s.writelines(line)
             self.split_locals(tier_files,outputdir,tier)
 

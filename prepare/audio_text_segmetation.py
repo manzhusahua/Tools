@@ -36,18 +36,24 @@ class PREPARINPUDIR():
             
             os.renames(text_file,
                        os.path.join(audio_path,os.path.basename(text_file)))
-
             
-    def process_a_filelist(self, input_dir, output_dir):
+    def process_a_filelist(self, input_dir,output_dir):
         input_audio_file = []
         input_txt_file = []
+        files_list = []
         for input_file in os.listdir(input_dir):
             if ".wav" in input_file:
                 input_audio_file.append(os.path.join(input_dir,input_file))
             if ".txt" in input_file:
                 input_txt_file.append(os.path.join(input_dir,input_file))
+                files_list.append("/".join([input_file.replace('.txt',''),'text',input_file]))
+
         self.audio_dir(input_audio_file)
         self.text_dir(input_txt_file)
+        with open(os.path.join(output_dir,"filenames.txt"),'w',encoding='utf8') as s:
+            for line in files_list:
+                s.writelines(line+'\n')
+
 
 
 INPUT_STEP = None
@@ -66,10 +72,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     prepare_dir = PREPARINPUDIR()
 
-    input_dir = r"C:\Users\v-zhazhai\Downloads\audio_conversion_16k"
-    output_dir = r"C:\Users\v-zhazhai\Downloads\audio_text_segmetation"
-    
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir, exist_ok=True)
-    
-    prepare_dir.process_a_filelist(input_dir, output_dir)
+    input_dir = r"C:\Users\v-zhazhai\Desktop\audio_conversion_16k\speech"
+    output_dir = r"C:\Users\v-zhazhai\Desktop\audio_conversion_16k"
+    prepare_dir.process_a_filelist(input_dir,output_dir)
