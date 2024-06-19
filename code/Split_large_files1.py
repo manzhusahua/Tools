@@ -2,7 +2,7 @@
 #将大文本文件分割成多个小文本文件,按照文件个数
 import os
  
-sourceFileName = r"C:\Users\v-zhazhai\Downloads\pt-BR_filenames.txt" #定义要分割的文件
+sourceFileName = r"C:\Users\v-zhazhai\Downloads\zh-CN_batch12_filenames.txt" #定义要分割的文件
 def cutFile():
     print("正在读取文件...")
     sourceFileData = open(sourceFileName,'r',encoding='utf-8')

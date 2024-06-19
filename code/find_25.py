@@ -34,12 +34,12 @@ def find_25(metadata_files):
 
 
 if __name__ == "__main__":
-    # files = r"C:\Users\v-zhazhai\Downloads\metadata_Jessa_general.csv"
-    files = sys.argv[1]
-    # speaker_id = "Jessa"
-    speaker_id = sys.argv[2]
-    # node = 10
-    node = sys.argv[3]
+    files = r"C:\Users\v-zhazhai\Downloads\metadata_PtBRMacerioOAI_general.csv"
+    # files = sys.argv[1]
+    speaker_id = "PtBRMacerioOAI"
+    # speaker_id = sys.argv[2]
+    node = 10
+    # node = sys.argv[3]
     updat_sid_file(files,files.replace(".csv","_v1.csv"),speaker_id,node)
     # os.remove(files)
     # os.renames(files.replace(".csv","_v1.csv"),files)

@@ -3,8 +3,8 @@ import os
 
 
 # 读取csv文件
-df = pd.read_csv(r"C:\Users\v-zhazhai\Downloads\metadata_Jessa_general.csv", sep='|', encoding='utf-8')
-save_path = r"C:\Users\v-zhazhai\Downloads\metadata_Jessa_general"
+df = pd.read_csv(r"C:\Users\v-zhazhai\Downloads\CaiQing\SWB_metadata.csv",sep='|', encoding='utf-8')
+save_path = r"C:\Users\v-zhazhai\Downloads\CaiQing\SWB_metadata"
 if not os.path.exists(save_path):
     os.makedirs(save_path, exist_ok=True)
 # 获取文件总行数
@@ -13,7 +13,7 @@ print(row_num)
 
 
 # 确定每个小文件要包含的数据量
-step = 2000
+step = 1000
 i=0
 for start in range(0, row_num, step):
     stop = start + step

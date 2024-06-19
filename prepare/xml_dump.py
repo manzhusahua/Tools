@@ -23,7 +23,8 @@ class XMLDUMP():
                 wav_file_name = line.split('\t')[0]
                 text = line.split('\t')[-1].replace('\n','')
                 row_values = {
-                            "wav": [wav_file_name],
+                            # "wav": [name.replace('.txt','.wav')],
+                            "wav": [line.split('\t')[0].replace('.wav','')],
                             "text": [text],
                             "textless": ["false"],
                             "human_voice": ["true"],
@@ -54,6 +55,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     xml_dump = XMLDUMP()
 
-    input_dir = r"C:\Users\v-zhazhai\Desktop\yaml\zh-CN\zh-CN_TTS\M272\proofreading"
-    output_dir = r"C:\Users\v-zhazhai\Desktop\yaml\zh-CN\zh-CN_TTS\M272"
+    input_dir = r"C:\Users\v-zhazhai\Downloads\CaiQing\test"
+    output_dir = r"C:\Users\v-zhazhai\Downloads\CaiQing"
     xml_dump.process_a_filelist(input_dir,output_dir)

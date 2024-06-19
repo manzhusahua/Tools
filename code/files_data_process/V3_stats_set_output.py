@@ -18,8 +18,9 @@ class JSONREAD():
         successfull_examples = []
         for name in os.listdir(json_dir):
             json_file = os.path.join(json_dir,name)
-            successfull_example = self.get_ttschunk_successfull_example(json_file)
-            successfull_examples.append(float(successfull_example))
+            if os.path.getsize(json_file) != 0:
+                successfull_example = self.get_ttschunk_successfull_example(json_file)
+                successfull_examples.append(float(successfull_example))
         print(str(round(sum(successfull_examples)/3600, 5)))
     
 JSON_INPUT_STEP = None
@@ -38,7 +39,7 @@ def run(mini_batch):
 if __name__ == "__main__":
     json_read = JSONREAD()
 
-    # json_dir = r"C:\Users\v-zhazhai\Desktop\stats_set_output"
-    json_dir = sys.argv[1]
+    json_dir = r"C:\Users\v-zhazhai\Desktop\stats_set_output"
+    # json_dir = sys.argv[1]
     json_read.run(json_dir)
     # json_read.get_ttschunk_successfull_example(r"C:\Users\v-zhazhai\Desktop\stats_set_output\stats_minibatch_10020_0.json")

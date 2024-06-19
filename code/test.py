@@ -213,8 +213,14 @@ def prepare_text(files_path):
         #         s.writelines()
 
 def get_fielwave(files1,files2):
+    chunk_names = []
+    with open(files1,'r',encoding='utf8') as f,open(files2,'w',encoding='utf8') as s:
+        for line in f.readlines():
+            chunk_name = line.split('\t')[0].split('/')[0]
+            if chunk_name not in chunk_names:
+                chunk_names.append(chunk_name)
+                s.writelines(chunk_name+'\n')
 
-    id1 = [x for x in open(files1,'r',encoding='utf8').readlines()]
 
 if __name__ == "__main__":
     wus2()

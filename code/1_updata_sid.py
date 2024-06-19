@@ -3,7 +3,8 @@ import multiprocessing
 import pandas as pd
 
 def updat_sid(metadata_files):
-    save_files = "\\".join(metadata_files.split("\\")[:-1])+"_finall\\"+metadata_files.split("\\")[-1]
+    save_files = metadata_files.replace(".csv","_v1.csv")
+    # save_files = "\\".join(metadata_files.split("\\")[:-1])+"_finall\\"+metadata_files.split("\\")[-1]
     data1 = pd.read_csv(metadata_files,sep="|",encoding='utf8',low_memory=False)
     save_data = pd.DataFrame()
     audio_book_names=list(set(["_".join(x.split('_')[2:-2]) for x in data1['sid']]))
@@ -18,7 +19,7 @@ def updat_sid(metadata_files):
                 for x in data1['sid']:
                     if "_".join([str(i),str(j).zfill(10),str(m)]) in x:
                         save_data = save_data._append(data1.iloc[int(list(data1['sid']).index(x))])
-#    save_data['style'] = save_data.apply(lambda x: "FreeTalk" , axis=1)
+    # save_data['style'] = save_data.apply(lambda x: "FreeTalk" , axis=1)
     save_data.to_csv(save_files,sep="|",encoding='utf8',index=False)
     return save_files
 
@@ -75,15 +76,16 @@ def get_registry(metadata_files,speaker_name,locale_name):
 
 if __name__ == "__main__":
 
-    input_metadata_path = r"C:\Users\v-zhazhai\Downloads\749"
-    speaker_name="XMLYAudiobook00587"
-    locale_name="zh-cn"
-    input_metadata_list = os.listdir(input_metadata_path)
-    if not os.path.exists(input_metadata_path+"_finall"):
-        os.makedirs(input_metadata_path+"_finall")
-    duration_totals = 0
-    for name in input_metadata_list:
-        save_files =updat_sid(os.path.join(input_metadata_path,name))
+    # input_metadata_path = r"C:\Users\v-zhazhai\Downloads\749"
+    # speaker_name="XMLYAudiobook00587"
+    # locale_name="zh-cn"
+    # input_metadata_list = os.listdir(input_metadata_path)
+    # if not os.path.exists(input_metadata_path+"_finall"):
+    #     os.makedirs(input_metadata_path+"_finall")
+    # duration_totals = 0
+    # for name in input_metadata_list:
+        save_files =updat_sid(r"C:\Users\v-zhazhai\Downloads\metadata_FrCAThierryOAI_general.csv")
+        updat_metadata(r"C:\Users\v-zhazhai\Downloads\metadata_FrCAThierryOAI_general_v1.csv","FrCAThierryOAI")
         # duration_total = updat_metadata(save_files,speaker_name)
         # get_registry(save_files,speaker_name,locale_name)
         # duration_totals+=duration_total
