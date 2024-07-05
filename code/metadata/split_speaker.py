@@ -24,7 +24,8 @@ class SPLITSPEAKER():
 if __name__ == "__main__":
     split_metadata = SPLITSPEAKER()
     metadata_path = r"C:\Users\v-zhazhai\Downloads\metadata.csv"
-    speaker = "RoROAlina"
-    save_path = r"C:\Users\v-zhazhai\Downloads\metadata.csv"
+    speaker = "IdIDArdi"
+    save_path = r"C:\Users\v-zhazhai\Downloads\{}.csv".format(speaker)
+    # print(save_path)
 
     split_metadata.split_metadata(metadata_path,speaker)

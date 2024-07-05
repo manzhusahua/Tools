@@ -1,12 +1,12 @@
 #!/bin/bash
 
 
-workspace_name="zetta-prod-ws02-eus2"
-compute_target="ZettA-AML-D32v3"
+workspace_name="zetta-amprod-ws01-scus"
+compute_target="ZettA-AML-Win"
 
-inputdir="/datablob/TTS_ChunkData/PodCast/v3/chunk_output/zh-CN/batch01_chunk"
+inputdir="/datablob/run_metadata/9b51e790-15bd-49a7-9d22-9218dc9c30d1/metadata_set_output"
 outputdir="/datablob/v-zhazhai/filelist/PodCast/v3/chunk_output/zh-CN/batch01_chunk/ttschunk_richland_decoding"
-command="python ./V3_get_job_list/get_json_list.py "$inputdir" "$outputdir
+command="python ./V3_stats_set_output.py "$inputdir
 
 experiment_name="v3_json_filelist"
 display_name="PodCast_zh-CN_batch01_richland"

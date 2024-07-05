@@ -1,14 +1,22 @@
-import os
 import pandas as pd
-
-
-metdata_path = r"C:\Users\v-zhazhai\Downloads\CaiQing\data_change\EnUSZo.csv"
-data = pd.read_csv(metdata_path,sep="|",encoding='utf8')
-
-chunk_path = []
-for i in range(len(data)):
-    line = data.iloc[i]
-    speech_path = line["speech_path"].split('/')[1]
-    if speech_path not in chunk_path:
-        chunk_path.append(speech_path)
-        print(speech_path)
+import csv,os
+word = open(r"C:\Users\v-zhazhai\Downloads\trans.txt",'r',encoding='utf8').readlines()
+data_frame = None
+for line in word:
+    wav_name = line.split('\t')[0]+'.wav'
+    text = line.split('\t')[-1].replace('\n','')
+    row_values = {
+        "wav": [wav_name],
+        "text": [text],
+        "textless": ["false"],
+        "human_voice": ["true"],
+        "multispeaker_detect_score": ["-9999"],}
+    if data_frame is None:
+        data_frame = pd.DataFrame(row_values)
+    else:
+        newdata = pd.DataFrame(row_values)
+        data_frame = pd.concat([data_frame, newdata], axis=0, ignore_index=True)
+meta_file = os.path.join(r"C:\Users\v-zhazhai\Downloads", "metadata.csv")
+data_frame.to_csv(
+    meta_file, sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_NONE
+    )
