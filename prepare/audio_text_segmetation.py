@@ -54,6 +54,14 @@ class PREPARINPUDIR():
             for line in files_list:
                 s.writelines(line+'\n')
 
+    def not_floder(self,input_dir):
+        lst = list(set([line.split(".")[0] for line in os.listdir(input_dir)]))
+        for line in lst:
+            save_path = os.path.join(input_dir,line)
+            if not os.path.exists(save_path):
+                os.makedirs(save_path, exist_ok=True)
+            print("copy \""+os.path.join(input_dir,line+".*")+"\" \""+save_path+"\"")
+            os.system("copy \""+os.path.join(input_dir,line+".*")+"\" \""+save_path+"\"")
 
 
 INPUT_STEP = None
@@ -72,6 +80,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     prepare_dir = PREPARINPUDIR()
 
-    input_dir = r"C:\Users\v-zhazhai\Desktop\audio_conversion_16k\speech"
+    input_dir = r"C:\Users\v-zhazhai\Downloads\audio_text_segmetation"
     output_dir = r"C:\Users\v-zhazhai\Desktop\audio_conversion_16k"
-    prepare_dir.process_a_filelist(input_dir,output_dir)
+    prepare_dir.not_floder(input_dir)

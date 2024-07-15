@@ -6,12 +6,14 @@ class STEP1():
     # def init(self, snapshot_dir="", resource_dir_dict={}, arg_list=[]):
         # self.inputdir = resource_dir_dict["--inputdir"]
         # self.locals = resource_dir_dict["--locals"]
-    
-    def step1_getaudioList(self,inputdir,locals):
-        token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-05-07T05%3A34%3A36Z&se=2024-05-31T15%3A59%3A00Z&sp=rwdxftlacup&sig=b1t1LZTCF4za1Q5ZZBEBrFoXXrYbLY30vUMpGeqGIDE%3D'
+    token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-07-11T08%3A04%3A21Z&se=2024-07-12T08%3A04%3A21Z&sp=rwdxftlacup&sig=ID8FEGkmedknrF9XFBprYmziYrE4NUEMABHQLQBup74%3D'
 
+    def step1_getaudioList(self,inputdir,locals):
+        # token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-07-11T08%3A04%3A21Z&se=2024-07-12T08%3A04%3A21Z&sp=rwdxftlacup&sig=ID8FEGkmedknrF9XFBprYmziYrE4NUEMABHQLQBup74%3D'
+        if not os.path.exists(inputdir):
+            os.makedirs(inputdir, exist_ok=True)
         output_list = os.path.join(inputdir,locals+'.txt')
-        word1 = 'C:/Users/v-zhazhai/Toosl/code/Tool/merger_tar/azcopy.exe list  "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/{}/{}" > "{}"'.format(locals,token,output_list)
+        word1 = 'C:/Users/v-zhazhai/Toosl/Tools/azcopy.exe list "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/{}/{}" > "{}"'.format(locals,self.token,output_list)
         print(word1)
         os.system(word1)
         return output_list
@@ -25,12 +27,12 @@ class STEP1():
                 line = line.split(";")[0].replace("INFO: ",'')
                 if "audioList.txt" in line:
 
-                    token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-05-07T05%3A34%3A36Z&se=2024-05-31T15%3A59%3A00Z&sp=rwdxftlacup&sig=b1t1LZTCF4za1Q5ZZBEBrFoXXrYbLY30vUMpGeqGIDE%3D'
+                    # token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-07-11T08%3A04%3A21Z&se=2024-07-12T08%3A04%3A21Z&sp=rwdxftlacup&sig=ID8FEGkmedknrF9XFBprYmziYrE4NUEMABHQLQBup74%3D'
 
                     audioList ='/'.join([locals,line])
                     output_audioList = os.path.join(save_path,line.replace('/','\\'))
 
-                    word1 = 'C:/Users/v-zhazhai/Toosl/code/Tool/merger_tar/azcopy.exe copy  "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/{}{}" "{}"'.format(audioList,token,output_audioList)
+                    word1 = 'C:/Users/v-zhazhai/Toosl/code/Tool/merger_tar/azcopy.exe copy  "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/{}{}" "{}"'.format(audioList,self.token,output_audioList)
                     print(word1)
                     os.system(word1)
 
@@ -39,7 +41,7 @@ class STEP1():
     def run(self,inputdir,locals):
         # output_list = r"C:\Users\v-zhazhai\Desktop\TTS\pt-BR\YouTube\pt-BR.txt"
         output_list = self.step1_getaudioList(inputdir,locals)
-        self.step1_download(output_list)
+        # self.step1_download(output_list)
 
 
 
@@ -57,8 +59,8 @@ def run(mini_batch):
     return WAVE_INPUT_STEP.prs_step_run(mini_batch)
 
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Desktop\TTS\pt-BR\YouTube"
-    locals =  "pt-BR"
+    inputdir = r"C:\Users\v-zhazhai\Desktop\TTS\en-US\YouTube"
+    locals =  "en-US"
 
     step1 = STEP1()
     step1.run(inputdir,locals)

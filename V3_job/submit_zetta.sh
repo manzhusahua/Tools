@@ -1,15 +1,22 @@
 #!/bin/bash
 
 
-workspace_name="zetta-amprod-ws01-scus"
-compute_target="ZettA-AML-Win"
+# workspace_name="zetta-amprod-ws01-scus"
+# compute_target="ZettA-AML-D64v4"
 
-inputdir="/datablob/run_metadata/9b51e790-15bd-49a7-9d22-9218dc9c30d1/metadata_set_output"
-outputdir="/datablob/v-zhazhai/filelist/PodCast/v3/chunk_output/zh-CN/batch01_chunk/ttschunk_richland_decoding"
-command="python ./V3_stats_set_output.py "$inputdir
+workspace_name="zetta-prod-ws02-eus2"
+compute_target="ZettA-AML-D8v3"
 
-experiment_name="v3_json_filelist"
-display_name="PodCast_zh-CN_batch01_richland"
+inputdir="/datablob/v-zhazhai/test/copy"
+outputdir="/datablob/v-zhazhai/test/copy1"
+# command="python ./V3_stats_set_output.py "$inputdir
+command="python ./copy_chunk.py "$inputdir" "$outputdir
+
+# experiment_name="V3_stats_set_output"
+# display_name="zhCN_batch08_ttschunk_audio_text_segment"
+
+experiment_name="copy_chunk"
+display_name="test1"
 
 "C:\Users\v-zhazhai\Toosl\miniconda3\envs\use\python.exe" -u submit/zetta_submit.py \
   --workspace-name "${workspace_name}" \
