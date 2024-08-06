@@ -15,7 +15,15 @@ class UPDATALIST():
             for home, dirs, files in os.walk(chunkpath):
                 for filename in files:
                     if ".json" in filename and ".json.version" not in filename:
-                        s.writelines(os.path.join(home, filename)+'\n')
+                        try:
+                            coarse_segment = os.path.join(home, filename.replace('.json','.coarse_segment'))
+                            fine_segment = os.path.join(home, filename.replace('.json','.fine_segment'))
+                            if os.path.getsize(coarse_segment) > 10240 and os.path.getsize(fine_segment)> 10240:
+                                s.writelines(os.path.join(home, filename)+'\n')
+                        except Exception as e:
+                            print("The {} chunk file is not complete.".format(filename))
+                            break
+                        
         return os.path.join(outputdir,"all.txt")
     
     def split_datas(self,listfile,outputdir,tier,local,dataset):
