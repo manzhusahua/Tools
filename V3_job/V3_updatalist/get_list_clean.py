@@ -22,7 +22,7 @@ class UPDATALIST():
                                 s.writelines(os.path.join(home, filename)+'\n')
                         except Exception as e:
                             print("The {} chunk file is not complete.".format(filename))
-                            break
+                            continue
                         
         return os.path.join(outputdir,"all.txt")
     

@@ -4,19 +4,19 @@
 # workspace_name="zetta-amprod-ws01-scus"
 # compute_target="ZettA-AML-D64v4"
 
-workspace_name="zetta-prod-ws02-eus2"
-compute_target="ZettA-AML-D8v3"
+workspace_name="zetta-prod-ws01-wus2"
+compute_target="Zetta-AML-DATA"
 
-inputdir="/datablob/v-zhazhai/test/copy"
-outputdir="/datablob/v-zhazhai/test/copy1"
+inputdir="/datablob/realisticttsdataset_v3/train/chunks/"
+outputdir="/datablob/v-zhazhai/unified_dataplatform_v3/filelist/20240718"
 # command="python ./V3_stats_set_output.py "$inputdir
-command="python ./copy_chunk.py "$inputdir" "$outputdir
+command="python ./V3_updatalist/get_list.py "$inputdir" "$outputdir
 
 # experiment_name="V3_stats_set_output"
 # display_name="zhCN_batch08_ttschunk_audio_text_segment"
 
-experiment_name="copy_chunk"
-display_name="test1"
+experiment_name="V3_updatalist"
+display_name="20240718"
 
 "C:\Users\v-zhazhai\Toosl\miniconda3\envs\use\python.exe" -u submit/zetta_submit.py \
   --workspace-name "${workspace_name}" \

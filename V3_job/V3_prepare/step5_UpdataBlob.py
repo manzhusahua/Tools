@@ -4,18 +4,19 @@ import os
 class step5:
     def __init__(self) -> None:
         super().__init__()
+    def init(self, snapshot_dir="", resource_dir_dict={}, arg_list=[]):
+        self.token1 = resource_dir_dict["--token1"] 
+        self.token2 = resource_dir_dict["--token2"] 
 
     def step5_updata_tts_filelist(self,local,files_path,batch):
         input_path = "\\".join([files_path,"v3",'step3_extract_tts_filelist',batch+'.txt'])
-        token = r'?sv=2023-01-03&st=2024-04-29T02%3A12%3A52Z&se=2024-05-31T02%3A12%3A00Z&sr=c&sp=racwdxltf&sig=y4qplet74XqfhN9o46HzSMXj29clJcj6faAc%2B1L5fYI%3D'
-        updata_tts_filelist = 'C:/Users/v-zhazhai/Toosl/Tools/azcopy.exe copy "{}" "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/TTS_filelist/{}/{}{}" --overwrite=false'.format(input_path,local,batch+'.txt',token)
+        updata_tts_filelist = 'C:/Users/v-zhazhai/Toosl/Tools/azcopy.exe copy "{}" "https://speechdatacrawlrgwusdiag.blob.core.windows.net/rawpublicdata/TTS_filelist/{}/{}{}" --overwrite=false'.format(input_path,local,batch+'.txt',self.token1)
         print(updata_tts_filelist)
         os.system(updata_tts_filelist)
     
     def step5_updata_dump_json(self,local,files_path,batch):
         input_path = "\\".join([files_path,batch,'*'])
-        token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-04-19T07%3A41%3A52Z&se=2024-04-20T07%3A41%3A52Z&sp=rwdxftlacup&sig=Cs8b89cF%2F7p4A%2FLq%2FJOm7Gi0oj1fAg6gX3Xe3BlRhvw%3D'
-        updata_dump_json = 'C:/Users/v-zhazhai/Toosl/Tools/azcopy.exe copy {} "https://stdstoragettsdp01wus2.blob.core.windows.net/data/TTS_ChunkData/{}/YouTube/v3/YouTube_temp/{}/{}" --overwrite=false'.format(input_path,local,batch,token)
+        updata_dump_json = 'C:/Users/v-zhazhai/Toosl/Tools/azcopy.exe copy {} "https://stdstoragettsdp01wus2.blob.core.windows.net/data/TTS_ChunkData/{}/YouTube/v3/YouTube_temp/{}/{}" --overwrite=false'.format(input_path,local,batch,self.token2)
         print(updata_dump_json)
         os.system(updata_dump_json)
 
