@@ -3,13 +3,12 @@ import os
 class STEP1():
     def __init__(self) -> None:
         super().__init__()
-    # def init(self, snapshot_dir="", resource_dir_dict={}, arg_list=[]):
+    def init(self, snapshot_dir="", resource_dir_dict={}, arg_list=[]):
+        self.token = resource_dir_dict["--token"]
         # self.inputdir = resource_dir_dict["--inputdir"]
         # self.locals = resource_dir_dict["--locals"]
-    token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-07-11T08%3A04%3A21Z&se=2024-07-12T08%3A04%3A21Z&sp=rwdxftlacup&sig=ID8FEGkmedknrF9XFBprYmziYrE4NUEMABHQLQBup74%3D'
 
     def step1_getaudioList(self,inputdir,locals):
-        # token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-07-11T08%3A04%3A21Z&se=2024-07-12T08%3A04%3A21Z&sp=rwdxftlacup&sig=ID8FEGkmedknrF9XFBprYmziYrE4NUEMABHQLQBup74%3D'
         if not os.path.exists(inputdir):
             os.makedirs(inputdir, exist_ok=True)
         output_list = os.path.join(inputdir,locals+'.txt')
@@ -26,8 +25,6 @@ class STEP1():
             for line in f.readlines()[2:]:
                 line = line.split(";")[0].replace("INFO: ",'')
                 if "audioList.txt" in line:
-
-                    # token = r'?sv=2023-01-03&ss=btqf&srt=sco&st=2024-07-11T08%3A04%3A21Z&se=2024-07-12T08%3A04%3A21Z&sp=rwdxftlacup&sig=ID8FEGkmedknrF9XFBprYmziYrE4NUEMABHQLQBup74%3D'
 
                     audioList ='/'.join([locals,line])
                     output_audioList = os.path.join(save_path,line.replace('/','\\'))

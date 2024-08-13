@@ -65,8 +65,8 @@ def main():
     storage_data = {}
     # standard_datastore_name = "stdstoragetts01eus2_data"
     # standard_datastore_name = "stdstoragettsdp02scus_data"
-    # standard_datastore_name = "stdstoragetts01wus2_data"
-    standard_datastore_name = "stdstoragettsdp02eus_data"
+    standard_datastore_name = "stdstoragetts01wus2_data"
+    # standard_datastore_name = "stdstoragettsdp02eus_data"
     standard_datastore = Datastore.get(workspace, standard_datastore_name)
     standard_data_reference = DataReference(
         datastore=standard_datastore,
@@ -83,8 +83,8 @@ def main():
     logger.info(f"Mount Premium Azure Blob {premium_blob_name} to /modelblob ...")
     # premium_datastore_name = "stdstoragetts01eus2_data"
     # premium_datastore_name = "stdstoragettsdp02scus_data"
-    # premium_datastore_name = "stdstoragetts01wus2_data"
-    premium_datastore_name = "stdstoragettsdp02eus_data"
+    premium_datastore_name = "stdstoragetts01wus2_data"
+    # premium_datastore_name = "stdstoragettsdp02eus_data"
     premium_datastore = Datastore.get(workspace, premium_datastore_name)
     premium_data_reference = DataReference(
         datastore=premium_datastore,
