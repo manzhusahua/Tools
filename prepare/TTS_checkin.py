@@ -11,6 +11,12 @@ class TTSCheckin:
 
     names = ["Alignment", "Speech", "TextScripts", "XmlScripts"]
 
+    def prepare_folder(self, inputdir):
+        for name in self.names:
+            save_path = os.path.join(inputdir, name)
+            if not os.path.exists(save_path):
+                os.makedirs(save_path, exist_ok=True)
+
     def wave_floder(self, inputdir, wave_list):
         for wave_name in wave_list:
             for name in self.names:
@@ -18,14 +24,9 @@ class TTSCheckin:
                 if not os.path.exists(save_path):
                     os.makedirs(save_path, exist_ok=True)
 
-    def prepare_folder(self, inputdir):
-        for name in self.names:
-            save_path = os.path.join(inputdir, name)
-            if not os.path.exists(save_path):
-                os.makedirs(save_path, exist_ok=True)
-
 
 if __name__ == "__main__":
     input_dir = r"D:\users\v-zhazhai\Tools\TTSData\ttsdata\ttsdata\zh-CN\Voices\Others\Honor\CNV"
+
     for name in os.listdir(input_dir):
-        prepare_folder(os.path.join(input_dir, name))
+        TTSCheckin.prepare_folder(os.path.join(input_dir, name))
