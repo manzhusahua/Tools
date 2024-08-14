@@ -14,7 +14,8 @@ class PREPAREFILES:
 
     def dump_json(self, inputdir, outputdir):
         Durations = 0.0
-
+        if not os.path.exists(outputdir):
+            os.system("mkdir {}".format(outputdir))
         for filename in os.listdir(inputdir):
             with open(os.path.join(inputdir, filename), "r", encoding="utf8") as f:
                 for line in f.readlines()[1:]:
@@ -68,14 +69,16 @@ def run(mini_batch):
 if __name__ == "__main__":
 
     PrepareFiles = PREPAREFILES()
+    PrepareFiles.dump_json(sys.argv[1], sys.argv[2])
 
-    dataset_path = r"C:\Users\v-zhazhai\Desktop\zh-CN_Bilii\zh-CN\FY23Q4\AcFun"
-    output_path = r"C:\Users\v-zhazhai\Desktop\zh-CN_Bilii\zh-CN\FY23Q4\prepare\AcFun"
+    dataset_path = (
+        r"C:\Users\v-zhazhai\Desktop\zh-CN_Bilii\zh-CN\FY23Q4\YouTubeOcrFY23Q4"
+    )
+    output_path = (
+        r"C:\Users\v-zhazhai\Desktop\zh-CN_Bilii\zh-CN\FY23Q4\prepare\YouTubeOcrFY23Q4"
+    )
 
     for name in os.listdir(dataset_path):
-        if not os.path.exists(os.path.join(output_path, name)):
-            os.system("mkdir {}".format(os.path.join(output_path, name)))
-
         PrepareFiles.dump_json(
             os.path.join(dataset_path, name), os.path.join(output_path, name)
         )
