@@ -76,20 +76,6 @@ if __name__ == "__main__":
     tier = "tier1"
     locals = "en-us"
     lines = [
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R10/chunk_7f6b4a9d2705ac2162bca5d1751760c2_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_0563cdb39b4cfef6e7005b192789845d_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_0ff95259d6927a3a2179c887443683a3_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_25b54cb261b4810bb8e38e1d17ecb3e4_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_32e4685c5645fa9b6ed0ea663d013191_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_3847f63dd3b14938ed54aca5f04910a7_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_5c1f407d1863b2840e5de7b53b10610c_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_a17a66fd9a94336172be6f0f5e0cfc2e_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_b0b9b4bad19fdb4347de4ed020820d5c_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_d04d726c04e33fdb73ac395ed370af22_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_d0c9c6d09f16f46914e01d4c87b34522_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_d209f08a7587b26d917491268b25b9ae_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_d4c27847f72e0df60de9d1a300d913a1_0.json",
-        "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/long_form_R12/chunk_dbbe8f91a44a3795a62a2262f8558596_0.json",
         "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/short_form_R10/chunk_7e60aa895db6088fe6367a2ca7abbab5_0.json",
         "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/short_form_R10/chunk_910443bb1e784b44dc6fb3d7d8819fb7_0.json",
         "/datablob/realisticttsdataset_v3/train/chunks/tier1/en-us/asr/short_form_R12/chunk_09c79cc5019ecfb27513f8f3c1363f4a_0.json",
