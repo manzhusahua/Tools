@@ -1,4 +1,6 @@
 import os
+import tarfile
+import shutil
 
 def mkdir_floder(inputdir,fodername):
     save_path = os.path.join(inputdir,fodername,"PlainText")
@@ -18,12 +20,32 @@ def prepare_wav(inputdir,local):
             s.writelines(line)
     os.system('C:/Users/v-zhazhai/.conda/envs/test/python.exe {}'.format(add_ssml_path))
 
-    
+def un_tar(file_name):
+    tar = tarfile.open(file_name)
+    names = tar.getnames()
+    if os.path.isdir(file_name + "_files"):
+        pass
+    else:
+        os.mkdir(file_name + "_files")
+    for name in names:
+        tar.extract(name, file_name + "_files/")
+    tar.close()
+    os.remove(file_name)
 
 if __name__ == "__main__":
     
-    inputdir = r"D:\users\voices"
-    locals_list = ["kk-KZ","km-KH","kn-IN","ko-KR","lo-LA","lt-LT","lv-LV","mk-MK","ml-IN","mn-MN","ms-MY","mt-MT","my-MM","nb-NO"]
-    for name in locals_list:
+    files1 = r"C:\Users\v-zhazhai\Downloads\filenames.txt"
+    files2 = r"C:\Users\v-zhazhai\Downloads\filenames_FreeTalk.txt"
 
-        prepare_wav(inputdir,name)
+    word = []
+    with open(files1,'r',encoding='utf8') as f,open(files2,'w',encoding='utf8') as s:
+        for line in f.readlines():
+            name = int(line.split('_')[0].replace("XMLYAudiobook",''))
+            if name >= 583:
+                word.append(line)
+                s.writelines(line)
+    s.close()
+    f.close()
+    # os.remove(files1)
+    # os.renames(files2,files1)
+    

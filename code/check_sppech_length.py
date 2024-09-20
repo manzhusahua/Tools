@@ -13,5 +13,5 @@ def get_wav_time(wav_path):
     print(str(round(sum(time_counts)/3600, 5)))
 
 if __name__ == "__main__":
-    wav_path = r"D:\users\v-zhazhai\TTS\zh-CN\M400\20240508\Wave48kNormalized2"
+    wav_path = r"C:\Users\v-zhazhai\Downloads\Emo-DB\wav"
     get_wav_time(wav_path)

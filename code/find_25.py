@@ -34,9 +34,9 @@ def find_25(metadata_files):
 
 
 if __name__ == "__main__":
-    files = r"C:\Users\v-zhazhai\Downloads\metadata_PtBRMacerioOAI_general.csv"
+    files = r"C:\Users\v-zhazhai\Downloads\metadata_FiFIHarri_general.csv"
     # files = sys.argv[1]
-    speaker_id = "PtBRMacerioOAI"
+    speaker_id = "FiFIHarri"
     # speaker_id = sys.argv[2]
     node = 10
     # node = sys.argv[3]
