@@ -18,7 +18,8 @@ class XMLDUMP():
         for name in os.listdir(input_dir):
             file_path = os.path.join(input_dir,name)
             content=codecs.open(file_path,'rb').read()
-            word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()
+            # word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()
+            word = open(file_path,'r',encoding='utf8').readlines()
             for line in word:
                 wav_file_name = line.split('\t')[0]
                 text = line.split('\t')[-1].replace('\n','')
@@ -37,7 +38,7 @@ class XMLDUMP():
                     data_frame = pd.concat([data_frame, newdata], axis=0, ignore_index=True)
         meta_file = os.path.join(output_dir, "metadata.csv")
         data_frame.to_csv(
-            meta_file, sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_NONE
+            meta_file, sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_MINIMAL
             )
 INPUT_STEP = None
 
@@ -55,6 +56,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     xml_dump = XMLDUMP()
 
-    input_dir = r"C:\Users\v-zhazhai\Downloads\CaiQing\test"
-    output_dir = r"C:\Users\v-zhazhai\Downloads\CaiQing"
+    input_dir = r"C:\Users\v-zhazhai\Downloads\trans"
+    output_dir = r"C:\Users\v-zhazhai\Downloads"
     xml_dump.process_a_filelist(input_dir,output_dir)

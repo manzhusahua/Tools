@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import os, shutil
 import tarfile
+=======
+import os
+import tarfile
+import shutil
+>>>>>>> 105a3862ecb20291c98662288f3278bc0df5c50c
 
 
 def mkdir_floder(inputdir, fodername):
@@ -67,6 +73,7 @@ def xmly_prepare(inputdir, chunk_name, outputdir):
         if os.path.exists(trans_name2 + "_files"):
             shutil.rmtree(trans_name2 + "_files")
 
+<<<<<<< HEAD
 
 if __name__ == "__main__":
 
@@ -80,3 +87,34 @@ if __name__ == "__main__":
     chunk_name = ["chunk_000a2d20dd2fd34a60ce57262c1a9f32_0"]
     outputdir = r"C:\Users\v-zhazhai\Downloads\test2"
     xmly_prepare(inputdir, chunk_name, outputdir)
+=======
+def un_tar(file_name):
+    tar = tarfile.open(file_name)
+    names = tar.getnames()
+    if os.path.isdir(file_name + "_files"):
+        pass
+    else:
+        os.mkdir(file_name + "_files")
+    for name in names:
+        tar.extract(name, file_name + "_files/")
+    tar.close()
+    os.remove(file_name)
+
+if __name__ == "__main__":
+    
+    files1 = r"C:\Users\v-zhazhai\Downloads\filenames.txt"
+    files2 = r"C:\Users\v-zhazhai\Downloads\filenames_FreeTalk.txt"
+
+    word = []
+    with open(files1,'r',encoding='utf8') as f,open(files2,'w',encoding='utf8') as s:
+        for line in f.readlines():
+            name = int(line.split('_')[0].replace("XMLYAudiobook",''))
+            if name >= 583:
+                word.append(line)
+                s.writelines(line)
+    s.close()
+    f.close()
+    # os.remove(files1)
+    # os.renames(files2,files1)
+    
+>>>>>>> 105a3862ecb20291c98662288f3278bc0df5c50c
