@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import zipfile
 import os, sys
 import shutil
@@ -8,6 +9,13 @@ class ZIPDIR:
         super().__init__()
 
     def zipDir(self, dirpath, outFullName):
+=======
+
+import zipfile
+import os
+class ZIPDIR:
+    def zipDir(dirpath, outFullName):
+>>>>>>> 1b35db3cd0b79daefed15bffcead9194c8165b0b
         """
         压缩指定文件夹
         :param dirpath: 目标文件夹路径
@@ -17,13 +25,19 @@ class ZIPDIR:
         zip = zipfile.ZipFile(outFullName, "w", zipfile.ZIP_DEFLATED)
         for path, dirnames, filenames in os.walk(dirpath):
             # 去掉目标跟路径，只对目标文件夹下边的文件及文件夹进行压缩
+<<<<<<< HEAD
             fpath = path.replace(dirpath, "")
 
+=======
+            fpath = path.replace(dirpath, '')
+    
+>>>>>>> 1b35db3cd0b79daefed15bffcead9194c8165b0b
             for filename in filenames:
                 print(filename)
                 zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
         zip.close()
 
+<<<<<<< HEAD
         # shutil.rmtree(dirpath, ignore_errors=True)
 
 
@@ -45,3 +59,6 @@ def run(mini_batch):
 
 if __name__ == "__main__":
     zip_Dir = ZIPDIR()
+=======
+        # shutil.rmtree(dirpath, ignore_errors=True)
+>>>>>>> 1b35db3cd0b79daefed15bffcead9194c8165b0b

@@ -21,7 +21,6 @@ class XMLDUMP():
             # word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()
             word = open(file_path,'r',encoding='utf8').readlines()
             for line in word:
-                wav_file_name = line.split('\t')[0]
                 text = line.split('\t')[-1].replace('\n','')
                 row_values = {
                             # "wav": [name.replace('.txt','.wav')],
@@ -39,7 +38,7 @@ class XMLDUMP():
         meta_file = os.path.join(output_dir, "metadata.csv")
         data_frame.to_csv(
             meta_file, sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_MINIMAL
-            )
+            ,escapechar='|')
 INPUT_STEP = None
 
 def init():
@@ -56,6 +55,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     xml_dump = XMLDUMP()
 
-    input_dir = r"C:\Users\v-zhazhai\Downloads\trans"
-    output_dir = r"C:\Users\v-zhazhai\Downloads"
+    input_dir = r"C:\Users\v-zhazhai\Desktop\20230219085455\test"
+    output_dir = r"C:\Users\v-zhazhai\Desktop\20230219085455"
     xml_dump.process_a_filelist(input_dir,output_dir)
