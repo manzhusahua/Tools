@@ -1,0 +1,16 @@
+0	<pad>
+1	O
+2	<punc=，>
+3	<punc=。>
+4	<punc=？>
+5	<s>
+6	<unk>
+7	<blank>
+8	<bot>
+9	fp16_null_0
+10	fp16_null_1
+11	fp16_null_2
+12	fp16_null_3
+13	fp16_null_4
+14	fp16_null_5
+15	fp16_null_6

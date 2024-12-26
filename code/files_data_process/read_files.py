@@ -25,5 +25,10 @@ def run(mini_batch):
     return INPUT_STEP.prs_step_run(mini_batch)
 
 if __name__ == "__main__":
-    read_file = READFILE()\
+    read_file = READFILE()
+    import numpy as np
+    # word = read_file.read_file(r"C:\Users\v-zhazhai\Downloads\ms_score1")[0]
+    # # data = np.loadtxt(r"C:\Users\v-zhazhai\Downloads\ms_score1")
+    # print(np.fromfile(r"C:\Users\v-zhazhai\Downloads\ms_score1"))
+    # print(np.fromfile(r"C:\Users\v-zhazhai\Downloads\ms_score2"))
     
