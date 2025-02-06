@@ -24,7 +24,7 @@ headers={'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537
 
 SAS_token='?sv=2023-01-03&st=2024-12-15T09%3A29%3A28Z&se=2024-12-21T09%3A29%3A00Z&skoid=ee0abe40-c783-4ec3-9f28-341c64cfe859&sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&skt=2024-12-15T09%3A29%3A28Z&ske=2024-12-21T09%3A29%3A00Z&sks=b&skv=2023-01-03&sr=c&sp=racwdxltf&sig=x6NSiB1YTZLmrq10U%2FmPFN4vFeHDuqEHwTTL906AwQ8%3D'
 azcopy_path=r"D:\v-huayuecao\Apple_Data_Download\azcopy.exe"
-OUT_DIR=r"C:\Users\v-zhazhai\Desktop\Apple_data\batch02"
+OUT_DIR=r"C:\Users\v-zhazhai\Desktop\Apple_data\batch01"
 OUT_blobdir=r'https://stdstoragettsdp01eus.blob.core.windows.net/data/v-litfen/apple/tier1/it-it/podcast/raw/data_batch01/'
 # url=f"https://podcasts.apple.com/gb/charts"
 #
@@ -57,7 +57,7 @@ OUT_blobdir=r'https://stdstoragettsdp01eus.blob.core.windows.net/data/v-litfen/a
 #     for i in button:
 #         search_list_url.append(i.get_attribute("href"))
 
-search_list_url=['https://podcasts.apple.com/it/podcast/stasera-c%E2%80%99%C3%A8-cattelan---supernova/id1775666184','https://podcasts.apple.com/it/podcast/pulp-podcast/id1781213268','https://podcasts.apple.com/it/podcast/la-zanzara/id291100561','https://podcasts.apple.com/it/podcast/elisa-true-crime/id1628126740','https://podcasts.apple.com/it/podcast/e-poi-il-silenzio---il-disastro-di-rigopiano/id1766037480','https://podcasts.apple.com/it/podcast/il-podcast-di-alessandro-barbero%3A-lezioni-e-conferenze-di-storia/id1501956064','https://podcasts.apple.com/it/podcast/the-bull---il-tuo-podcast-di-finanza-personale/id1692088632','https://podcasts.apple.com/it/podcast/chiedilo-a-barbero---intesa-sanpaolo-on-air/id1688392438','https://podcasts.apple.com/it/podcast/geopop---le-scienze-nella-vita-di-tutti-i-giorni/id1695901195','https://podcasts.apple.com/it/podcast/one-more-time-di-luca-casadei/id1537557135','https://podcasts.apple.com/it/podcast/passa-dal-bsmt/id1649904820','https://podcasts.apple.com/it/podcast/nera/id1779458186','https://podcasts.apple.com/it/podcast/indagini/id1616476688','https://podcasts.apple.com/it/podcast/non-hanno-un-amico/id1642167995','https://podcasts.apple.com/it/podcast/alessandro-barbero-podcast---la-storia/id1568493219']
+search_list_url=["https://podcasts.apple.com/it/podcast/podcast-riccardo-fassone/id1105611392"]
 a=1
 for i in search_list_url:
     print(i)

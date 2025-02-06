@@ -3,6 +3,7 @@ import codecs
 import chardet
 import pandas as pd
 import csv
+import glob
 
 """
 准备xml
@@ -14,12 +15,12 @@ class XMLDUMP():
     
     def process_a_filelist(self, input_dir, output_dir):
         data_frame = None
-
-        for name in os.listdir(input_dir):
-            file_path = os.path.join(input_dir,name)
+        for file_path in glob.glob(os.path.join(input_dir, "**", "*.txt"), recursive=True):
             content=codecs.open(file_path,'rb').read()
-            # word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()
-            word = open(file_path,'r',encoding='utf8').readlines()
+            word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()
+            # word = open(file_path,'r',encoding='utf8').readlines()
+            
+            
             for line in word:
                 text = line.split('\t')[-1].replace('\n','')
                 row_values = {
@@ -36,9 +37,28 @@ class XMLDUMP():
                     newdata = pd.DataFrame(row_values)
                     data_frame = pd.concat([data_frame, newdata], axis=0, ignore_index=True)
         meta_file = os.path.join(output_dir, "metadata.csv")
-        data_frame.to_csv(
-            meta_file, sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_MINIMAL
-            ,escapechar='|')
+        data_frame.to_csv(meta_file, sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_MINIMAL,escapechar='|')
+
+    def process_a_filelists(self, input_dir, output_dir):
+        data_frame = None
+        for file_path in glob.glob(os.path.join(input_dir, "**", "*.txt"), recursive=True):
+            content=codecs.open(file_path,'rb').read()
+            word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()
+            row_values = {
+                "wav": [os.path.basename(file_path).replace('.txt','')],
+                "text": [word[0].replace('\n','')],
+                "textless": ["false"],
+                "human_voice": ["true"],
+                "multispeaker_detect_score": ["-9999"],
+                }
+            if data_frame is None:
+                data_frame = pd.DataFrame(row_values)
+            else:
+                newdata = pd.DataFrame(row_values)
+                data_frame = pd.concat([data_frame, newdata], axis=0, ignore_index=True)
+        meta_file = os.path.join(output_dir, "metadata.csv")
+        data_frame.to_csv(meta_file, sep="|", encoding="utf-8", index=False, quoting=csv.QUOTE_MINIMAL,escapechar='|')
+
 INPUT_STEP = None
 
 def init():
@@ -55,6 +75,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     xml_dump = XMLDUMP()
 
-    input_dir = r"C:\Users\v-zhazhai\Desktop\20230219085455\test"
-    output_dir = r"C:\Users\v-zhazhai\Desktop\20230219085455"
-    xml_dump.process_a_filelist(input_dir,output_dir)
+    input_dir = r"C:\Users\v-zhazhai\Downloads\input\xiaoxin_yukuai_zhcn_80"
+    # output_dir = r"C:\Users\v-zhazhai\Downloads\input\xiaoxin_shi_zhcn_40"
+    xml_dump.process_a_filelists(input_dir,input_dir)

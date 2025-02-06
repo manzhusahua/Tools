@@ -57,7 +57,7 @@ OUT_blobdir=r'https://stdstoragettsdp01eus.blob.core.windows.net/data/v-litfen/a
 #     for i in button:
 #         search_list_url.append(i.get_attribute("href"))
 
-search_list_url=['https://podcasts.apple.com/ca/podcast/the-joe-rogan-experience/id360084272','https://podcasts.apple.com/ca/podcast/the-daily/id1200361736','https://podcasts.apple.com/ca/podcast/the-good-whale/id1777471538','https://podcasts.apple.com/ca/podcast/the-mel-robbins-podcast/id1646101002','https://podcasts.apple.com/ca/podcast/dateline-nbc/id1464919521','https://podcasts.apple.com/ca/podcast/crime-junkie/id1322200189','https://podcasts.apple.com/ca/podcast/smartless/id1521578868','https://podcasts.apple.com/ca/podcast/someone-knows-something/id1089216339','https://podcasts.apple.com/ca/podcast/32-thoughts%3A-the-podcast/id1332150124','https://podcasts.apple.com/ca/podcast/huberman-lab/id1545953110']
+search_list_url=['https://podcasts.apple.com/ca/podcast/inconceivable-truth/id1737812524']
 a=1
 for i in search_list_url:
     print(i)

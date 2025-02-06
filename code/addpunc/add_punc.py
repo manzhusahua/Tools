@@ -405,6 +405,7 @@ def get_predictions_from_ONNX(onnx_session, vocab, pre_batch, lang_shift):
     return pred_onx
 
 def add_punc(input_transcription_file, temp_output_folder, output_transcription_withpunc_file):
+    # input_transcription_file = clean_word2(input_transcription_file)
     try:
         bpe_in_file = input_transcription_file
         if not os.path.exists(bpe_in_file):
@@ -424,10 +425,11 @@ def add_punc(input_transcription_file, temp_output_folder, output_transcription_
         except Exception as e: 
             print("Error loading ONNX file: ", str(e))
             return None
-
+        
         lang_shift = 8
         batch_size = 1
         vocab = [Vocab("zhCN/w2i.txt")]
+        
 
         # Text sample
         # batch = [['今天','天气', '炎热', '吗'], ['0月00日', '我', '跟', '老公', '过', '纪念日'], ['火车', '站', '在', '哪里', '呢'], ['猫', '喵', '喵', '叫']]
@@ -440,57 +442,48 @@ def add_punc(input_transcription_file, temp_output_folder, output_transcription_
         if result is not None:
             output_file_path = os.path.join(temp_output_folder, output_transcription_withpunc_file)
             with open(output_file_path, "w", encoding="utf-8") as f:
-                f.write(result)
-
+                # f.write(result)
+                f.write(clean_word1(result))
+        
     except Exception as e:
         print("Error: ", str(e))
 
 
-    # bpe_in_file = "bpe.in.text"
-    # bpe_out_file = "bpe.out.text"
-    # BPEmain(bpe_in_file, bpe_out_file)
-
-    # onnx_model_path = "zhCN/punc.onnx"
-    # try:
-    #     session = onnxruntime.InferenceSession(onnx_model_path)
-    #     print("ONNX model loaded...")
-    # except Exception as e: 
-    #     print("Error loading ONNX file: ", str(e))
-
-    # lang_shift = 8
-    # batch_size = 256
-    # vocab = [Vocab("zhCN/w2i.txt")]
-
-    # # Text sample
-    # # batch = [['今天','天气', '炎热', '吗'], ['0月00日', '我', '跟', '老公', '过', '纪念日'], ['火车', '站', '在', '哪里', '呢'], ['猫', '喵', '喵', '叫']]
-
-    # with open(bpe_out_file, "r") as reader:
-    #     batch = []
-    #     lines = reader.readlines()
-    #     for index, line in enumerate(lines):
-    #         line = line.strip("\n").split(" ")
-    #         batch.append(line)
-    #         if (len(batch) == batch_size) or (index == len(lines)-1):
-    #             for pre_batch in batch:
-    #                 scores = get_predictions_from_ONNX(session, vocab, pre_batch, lang_shift)
-    #                 print(tag2str(pre_batch, scores[0].tolist()))
-    #             batch = []
-
 def clean_word1(withpuncword):
     word = ""
     n=0
-    while n<=len(withpuncword.split(' ')):
+    while n<len(withpuncword.split(' ')):
         if withpuncword.split(' ')[n][-1].lower() in 'qwertyuiopasdfghjklmnbvcxz' and withpuncword.split(' ')[n][0].lower() in 'qwertyuiopasdfghjklmnbvcxz':
             word = word+withpuncword.split(' ')[n]+' '
         elif withpuncword.split(' ')[n][-1].lower() in 'qwertyuiopasdfghjklmnbvcxz' and withpuncword.split(' ')[n][0].lower() not in 'qwertyuiopasdfghjklmnbvcxz':
             word = word+withpuncword.split(' ')[n]+' '
         else:
             word = word+withpuncword.split(' ')[n]
-    print(word)
+        n+=1
+    return word
+
+def clean_word2(richland_files):
+    with open(richland_files, "r",encoding='utf8') as file:
+        data = json.load(file)
+    word  = data["Results"][0]["FullTranscription"]
+    # print(word) 
+    # word = open(richland_files,'r',encoding='utf8').readlines()[0].replace('\n','')
     
+    with open(richland_files.replace(".json","_clean.txt"),'w',encoding='utf8') as s:
+        # chinese_str = word.encode('utf-8').decode('unicode_escape')
+        # s.writelines(chinese_str+'\n')
+        s.writelines(word+'\n')
     
+    return richland_files.replace(".json","_clean.txt")
+
 if __name__ == "__main__":
+    import glob
     # add_punc("bpe.in.text", "temp", "output_withpunc.txt")
-    add_punc("/mnt/c/Users/v-zhazhai/Downloads/test/13.txt", "temp", "/mnt/c/Users/v-zhazhai/Desktop/Apple_data/1028/cn/E174/trans/13_withpunc.txt")
-    # word = '有没有 其他的 朋友 这边 有 位 朋友 也想 分享 来 第三 排 的 冰岛 大哥 冰岛 大哥 welcome 就是 头像 是 您 师傅 的 这位 郭 老师 咱们 认识 是吗 冰岛 大哥 您是 冰岛 大哥 吗'
-    # clean_word1(word)
+    richland_dir = "/mnt/c/Users/v-zhazhai/Downloads/test/2"
+    temp_dir = "/mnt/c/Users/v-zhazhai/Downloads/test/2"
+    
+    
+    for richland_json in glob.glob(os.path.join(richland_dir, "**", "*.txt"), recursive=True):
+        add_punc_files = richland_json.split("/")[-1].replace(".txt", "_withpunc.txt")
+        add_punc(richland_json, temp_dir, add_punc_files)
+    

@@ -1,7 +1,10 @@
 import os
 import zipfile
- 
- 
+import glob
+import shutil
+import codecs
+import chardet
+
 def zipDir(dirpath, outFullName):
     """
     压缩指定文件夹
@@ -15,12 +18,30 @@ def zipDir(dirpath, outFullName):
         fpath = path.replace(dirpath, '')
  
         for filename in filenames:
-            zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
+            if ".wav" in filename:
+                zip.write(os.path.join(path, filename), os.path.join(fpath, filename))
     zip.close()
  
- 
+def unzipDir(zippath,folder_abs):
+    zip_file = zipfile.ZipFile(zippath)
+    zip_list = zip_file.namelist()
+    for f in zip_list:
+        zip_file.extract(f, folder_abs)
+    zip_file.close()
+    for line in glob.glob(os.path.join(folder_abs, "**", "*.wav"), recursive=True):
+        os.renames(line,os.path.join(folder_abs,os.path.basename(line)))
+    shutil.rmtree(os.path.join(folder_abs,"__MACOSX"))
+    content=codecs.open(zippath.replace(".zip",".txt"),'rb').read()
+    word = open(zippath.replace(".zip",".txt"),'r',encoding=chardet.detect(content)['encoding']).readlines()
+    for line in word:
+        with open(os.path.join(folder_abs,line.split('\t')[0]+".txt"), 'w',encoding='utf8') as s:
+            s.writelines(line.split('\t')[1])
 if __name__ == "__main__":
-    input_path = "./origin_file_001"
-    output_path = "./test.zip"
+    # input_path = "./origin_file_001"
+    # output_path = "./test.zip"
  
-    zipDir(r"C:\Users\v-zhazhai\Downloads\CaiQing\AMI\00002\waves", r"C:\Users\v-zhazhai\Downloads\CaiQing\AMI\00002\waves.zip")
+    zipDir(r"C:\Users\v-zhazhai\Downloads\input\xiaoxin_yukuai_zhcn_80", r"C:\Users\v-zhazhai\Downloads\input\xiaoxin_yukuai_zhcn_80\waves.zip")
+    # for line in os.listdir(r"C:\Users\v-zhazhai\Downloads\rawdata"):
+    #     if line.endswith(".zip"):
+    #         unzipDir(os.path.join(r"C:\Users\v-zhazhai\Downloads\rawdata",line),os.path.join(r"C:\Users\v-zhazhai\Downloads\xdf_xiaoxin",line.replace(".zip","")))
+    # unzipDir(r"C:\Users\v-zhazhai\Downloads\rawdata\xiaoxin_beishang_zhcn_70.zip",r"C:\Users\v-zhazhai\Downloads\xdf_xiaoxin")

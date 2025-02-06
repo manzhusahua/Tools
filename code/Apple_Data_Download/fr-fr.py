@@ -57,7 +57,7 @@ OUT_blobdir=r'https://stdstoragettsdp01eus.blob.core.windows.net/data/v-litfen/a
 #     for i in button:
 #         search_list_url.append(i.get_attribute("href"))
 
-search_list_url=['https://podcasts.apple.com/fr/podcast/legend/id1691740320','https://podcasts.apple.com/fr/podcast/les-grosses-t%C3%AAtes/id369369012','https://podcasts.apple.com/fr/podcast/affaires-sensibles/id912451024','https://podcasts.apple.com/fr/podcast/la-derni%C3%A8re/id1766744611',"https://podcasts.apple.com/fr/podcast/hondelatte-raconte---christophe-hondelatte/id1146402624','https://podcasts.apple.com/fr/podcast/l'after-foot/id140644703",'https://podcasts.apple.com/fr/podcast/les-pieds-sur-terre/id160879442','https://podcasts.apple.com/fr/podcast/les-actus-du-jour---hugo-d%C3%A9crypte/id1552365367',"https://podcasts.apple.com/fr/podcast/fifty-states-%E2%80%94-un-podcast-quotidien/id1733461735","https://podcasts.apple.com/fr/podcast/entrez-dans-l'histoire/id1583548883","https://podcasts.apple.com/fr/podcast/le-phil-d'actu---philosophie-et-actualit%C3%A9/id1716611589","https://podcasts.apple.com/fr/podcast/femmes-d'exception/id1755708568",'https://podcasts.apple.com/fr/podcast/transfert/id1567870398','https://podcasts.apple.com/fr/podcast/liste-de-lecture/id1767845934','https://podcasts.apple.com/fr/podcast/choses-%C3%A0-savoir---culture-g%C3%A9n%C3%A9rale/id1048372492']
+search_list_url=["https://podcasts.apple.com/fr/podcast/nader-abou-anas/id1596758305"]
 a=1
 for i in search_list_url:
     print(i)
