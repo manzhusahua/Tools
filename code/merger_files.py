@@ -13,7 +13,14 @@ class MERGERDIR():
                 content=codecs.open(os.path.join(inpudir,name),'rb').read()
                 f = open(os.path.join(inpudir,name),'r',encoding=chardet.detect(content)['encoding']).read()
                 s.writelines(f+'\n') 
-
+    def merge_files1(self,folder_path, output_file):
+        with open(output_file, 'w', encoding='utf-8') as outfile:
+            for filename in os.listdir(folder_path):
+                file_path = os.path.join(folder_path, filename)
+                if os.path.isfile(file_path):
+                    with open(file_path, 'r', encoding='utf-8') as infile:
+                        outfile.write(infile.read())
+                        # outfile.write("\n")  # 添加换行符以分隔文件内容
 INPUT_STEP = None
 
 def init():
