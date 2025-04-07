@@ -61,7 +61,6 @@ class CREMA_D:
                 print(f"name is {name}")
                 continue
 
-
 class Emo_DB:
     def prepare_json(inputdir, outputdir):
         Gender_map = {
@@ -142,7 +141,6 @@ class Emo_DB:
                 print(f"Failed due to {e}")
                 print(f"name is {name}")
                 continue
-
 
 class yufei:
     def prepare_files(inputdir, outputdir):
@@ -233,7 +231,6 @@ class yufei:
             except Exception as e:
                 print(name)
                 continue
-
 
 class MELD:
     def prepare_json(inputdir, outputdir):
@@ -332,10 +329,55 @@ class EMNS:
                     save_text.writelines(line["utterance"] + "\n")
             except Exception as e:
                 print(f"Failed due to {e}")
-                
+
+class AISHELL_3:
+    def find_values(names):
+        map = pd.read_csv(r"C:\Users\v-zhazhai\Desktop\data_aishell3\spk-info.csv",sep="|",encoding='utf8',low_memory=False)
+        index = list(range(map.shape[0]))
+        age_group,gender,accent = "","",""
+        for i in index:
+            line = map.iloc[i]
+            if line['Names'] == names:
+                age_group = map.iloc[i]["age group"]
+                gender = map.iloc[i]["gender"]
+                accent = map.iloc[i]["accent"]
+        return age_group,gender,accent
+
+    def prepare_json(inputdir, outputdir):
+        content = codecs.open(inputdir, "rb").read()
+        word = open(inputdir, "r", encoding=chardet.detect(content)["encoding"]).readlines()
+        for line in word:
+            try:
+                AudioFileName = line.split('\t')[0]
+                Transcription = ''
+                for n in range(0,len(line.split('\t')[-1].split(" ")),2):
+                    Transcription+=line.split('\t')[-1].split(" ")[n]
+
+                age_group,gender,accent = AISHELL_3.find_values(AudioFileName[:7])
+                row_values = {
+                                    "AudioFileName": "{}".format(AudioFileName),
+                                    "Transcription": "{}".format(Transcription),
+                                    "AgeRroup": "{}".format(age_group),
+                                    "Gender": "{}".format(gender),
+                                    "Accent": "{}".format(accent),
+                                    "DataName": "{}".format("AISHELL-3"),
+                                    "Source": "emotional",
+                                }
+                with open(os.path.join(outputdir, AudioFileName.replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                    json.dump(row_values, save_json, indent=4)
+                with open(os.path.join(outputdir, AudioFileName.replace(".wav",".txt")),"w",encoding="utf8",) as save_text:
+                    save_text.writelines(Transcription)
+                # print(word[word.index(line) + 2])
+            except Exception as e:
+                print(f"Failed due to {e}")
+                print(f"name is {line}")
+                continue
+
+
+
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Downloads\EMNS\metadata.csv"
-    outputdir = r"C:\Users\v-zhazhai\Downloads\EMNS\json"
+    inputdir = r"C:\Users\v-zhazhai\Desktop\data_aishell3\content.txt"
+    outputdir = r"C:\Users\v-zhazhai\Desktop\data_aishell3\train"
     if not os.path.exists(outputdir):
         os.makedirs(outputdir, exist_ok=True)
-    EMNS.prepare_json(inputdir, outputdir)
+    AISHELL_3.prepare_json(inputdir, outputdir)

@@ -1,45 +1,32 @@
-import codecs
-import chardet
-import os
+import pandas as pd
 
-class OtherTools():
-    def __init__(self) -> None:
-        super().__init__()
-    
-    def split_txtfile_to_txtfiles(self,inputfile,outputdir):
-        """
-        将trans文件拆分成单个id的trans文件
-        """
-        if not os.path.exists(outputdir):
-            os.makedirs(outputdir, exist_ok=True)
-        
-        content=codecs.open(inputfile,'rb').read()
-        word = open(inputfile,'r',encoding=chardet.detect(content)['encoding']).readlines()
-        for line in word:
-            with open(os.path.join(outputdir,line.split('\t')[0]+'.txt'),'w',encoding='utf8') as s:
-                s.writelines(line.split('\t')[-1])
+line = 'SSB06930002.wav	武 wu3 术 shu4 始 shi3 终 zhong1 被 bei4 看 kan4 作 zuo4 我 wo3 国 guo2 的 de5 国 guo2 粹 cui4'
 
-    def rename_file(self,inputdir,outputdir,word):
-        for line in os.listdir(inputdir):
-            os.renames(os.path.join(inputdir,line),os.path.join(outputdir,line.replace(word,'')))
-INPUT_STEP = None
+def find_values(names):
+    map = pd.read_csv(r"C:\Users\v-zhazhai\Desktop\data_aishell3\spk-info.csv",sep="|",encoding='utf8',low_memory=False)
+    index = list(range(map.shape[0]))
+    age_group,gender,accent = "","",""
+    for i in index:
+        line = map.iloc[i]
+        if line['Names'] == names:
+            age_group = map.iloc[i]["age group"]
+            gender = map.iloc[i]["gender"]
+            accent = map.iloc[i]["accent"]
+    return age_group,gender,accent
 
-def init():
+AudioFileName = line.split('\t')[0]
 
-    global INPUT_STEP
-    INPUT_STEP = OtherTools()
+Transcription = ''
+for n in range(0,len(line.split('\t')[-1].split(" ")),2):
+    Transcription+=line.split('\t')[-1].split(" ")[n]
 
-    INPUT_STEP.prs_step_init()
-
-def run(mini_batch):
-
-    return INPUT_STEP.prs_step_run(mini_batch)
-
-if __name__ == "__main__":
-    Other_Tools = OtherTools()
-    
-    
-    inputfile = r"C:\Users\v-zhazhai\Downloads\EMNS\raw_webm_wave"
-    outputdir = r"C:\Users\v-zhazhai\Downloads\output"
-    
-    Other_Tools.rename_file(inputfile,inputfile,".webm")
+age_group,gender,accent = find_values(AudioFileName[:7])
+row_values = {
+                    "AudioFileName": "{}".format(AudioFileName),
+                    "Transcription": "{}".format(Transcription),
+                    "AgeRroup": "{}".format(age_group),
+                    "Gender": "{}".format(gender),
+                    "Accent": "{}".format(accent),
+                    "DataName": "{}".format(accent),
+                    "Source": "emotional",
+                }
