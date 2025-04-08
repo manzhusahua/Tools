@@ -37,7 +37,18 @@ def WenningWei(transfile,savedir):
     for line in word:
         with open(os.path.join(savedir,line.split('\t')[0]+".txt"),'w',encoding='utf8') as s:
             s.writelines(line.split('\t')[-1])
+def XiWang(transfile,wavefolder,savedir):
+    os.makedirs(savedir, exist_ok=True)
+    content=codecs.open(transfile,'rb').read()
+    word = open(transfile,'r',encoding=chardet.detect(content)['encoding']).readlines()
+    wavelist = os.listdir(wavefolder)
+    wavelist.sort()
+
+    for n in range(0,len(word)):
+        with open(os.path.join(savedir,wavelist[n].replace(".wav",".txt")),'w',encoding='utf8') as s:
+            s.writelines(word[n])
+        
 
 if __name__ == "__main__":
-    WenningWei(r"C:\Users\v-zhazhai\Desktop\001600020800001-001600024100004.txt",r"C:\Users\v-zhazhai\Desktop\Scripts\001600020800001-001600024100004")
+    WenningWei(r"C:\Users\v-zhazhai\Downloads\En-US-Dict\Scripts.txt",r"C:\Users\v-zhazhai\Downloads\En-US-Dict\Scripts")
     # ChaiQing(r"C:\Users\v-zhazhai\Desktop\prepare")
