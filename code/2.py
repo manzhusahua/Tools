@@ -1,36 +1,17 @@
 import os
-import time
-import pandas as pandasForSortingCSV
-from decimal import Decimal
-from distutils.util import strtobool
-import os
-import sys
 
-input_dir = sys.argv[1]
-output_dir = sys.argv[2]
-speaker = sys.argv[3]
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
-duration_total=0
-files=os.listdir(input_dir)
-Num=len(files)
-for i in range(0,int(Num)):
-    input=os.path.join(input_dir,'metadata_'+str(i)+'.csv')
-    output=os.path.join(output_dir,'metadata_'+str(i).zfill(5)+'_v1.csv')
-    try:
-        csvData = pandasForSortingCSV.read_csv(input,sep='|')
-        csvData['speaker'] = csvData.apply(lambda x: speaker, axis=1)
-        # csvData1= csvData[(csvData.multispeaker_detect_score < 0.9) & (csvData.human_voice)]
-        csvData.to_csv(output, sep='|', index=False, header=True)
+def get_folder_size(folder_path):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(folder_path):
+        for file in filenames:
+            file_path = os.path.join(dirpath, file)
+            # 确保文件存在（防止符号链接等问题）
+            if os.path.exists(file_path):
+                total_size += os.path.getsize(file_path)
+    return total_size
 
-
-        csvData2 = pandasForSortingCSV.read_csv(output,sep='|')
-        for index, row in csvData2.iterrows():
-            duration_total = duration_total + row['speech_length_in_s']
-    except Exception as e:
-        print(e, type(e))
-        print("empty: " + input)
-        continue
-
-duration_total = round(duration_total/3600, 2)
-print("duration1: " + str(duration_total))
+# 示例用法
+folder_path = r"C:\Users\v-zhazhai\Downloads\podcast_list"
+size_in_bytes = get_folder_size(folder_path)
+size_in_mb = size_in_bytes / (1024 * 1024)  # 转换为 MB
+print(f"文件夹大小: {size_in_bytes} 字节 ({size_in_mb:.2f} MB)")

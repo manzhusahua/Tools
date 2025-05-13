@@ -18,9 +18,8 @@ def cutFile(sourceFileName,n):
     print("开始进行分割···")
     for i in range(m):
         print("正在生成第" + str(i + 1) + "个子文件")
-        destFileName = (
-            os.path.splitext(sourceFileName)[0] + "_part" + str(i + 1) + ".txt"
-        )  # 定义分割后新生成的文件
+        # destFileName = (os.path.splitext(sourceFileName)[0] + "_part" + str(i + 1) + ".txt")  # 定义分割后新生成的文件
+        destFileName = os.path.join(os.path.split(sourceFileName)[0],str(i).zfill(5)+".txt")  # 定义分割后新生成的文件
         destFileData = open(destFileName, "w", encoding="utf-8")
         if i == m - 1:
             for line in ListOfLine[i * p :]:
@@ -32,5 +31,5 @@ def cutFile(sourceFileName,n):
     print("分割完成")
 
 if __name__ == "__main__":
-    sourceFileName = r"C:\Users\v-zhazhai\Desktop\filenames.txt"  # 定义要分割的文件
+    sourceFileName = r"C:\Users\v-zhazhai\Downloads\filelist\PodcastsSelected_rename_clean.txt"  # 定义要分割的文件
     cutFile(sourceFileName,4)

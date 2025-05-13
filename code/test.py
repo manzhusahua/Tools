@@ -192,26 +192,6 @@ def prepare_text(files_path):
             with open(os.path.join(files_path+"_audio",filename+'.txt'),'w',encoding='utf8') as s:
                 s.writelines(line.split('\t')[-1])
 
-# def get_fielwave(files,xmlfiles):
-#     f = open(files,'r',encoding='utf-16-le').readlines()
-#     i = [x for i,x in enumerate(f) if x.find("3070000953") != -1]
-#     # 打开XML文档
-#     dom = xml.dom.minidom.parse(xmlfiles)
-
-#     # 得到文档元素对象
-#     root = dom.documentElement
-#     # # 获取子标签名字
-#     bb = root.getElementsByTagName('si')
-#     with open(files.replace('.txt',"_v1.txt"),'w',encoding='utf-16-le') as s:
-#         for id in [x.split('\t')[0] for x in f]:
-#             if id not in [str(x.getAttribute("id")) for x in bb]:
-#                 print(id)
-        
-        # for line in bb:
-        #     iline.getAttribute("id")
-        #     if len([x for i,x in enumerate(f) if x.find(str(i)) != -1]) !=1:
-        #         s.writelines()
-
 def get_fielwave(files1,files2):
     chunk_names = []
     with open(files1,'r',encoding='utf8') as f,open(files2,'w',encoding='utf8') as s:
@@ -220,6 +200,7 @@ def get_fielwave(files1,files2):
             if chunk_name not in chunk_names:
                 chunk_names.append(chunk_name)
                 s.writelines(chunk_name+'\n')
+
 
 
 if __name__ == "__main__":
