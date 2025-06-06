@@ -31,9 +31,9 @@ def has_folder(speaker,metadatafloder):
 
 if __name__ == "__main__":
         # has_folder("EnUSLibri-RTTS",r"C:\Users\v-zhazhai\Desktop\merged_more_books_with_small_metadata_updata_sid_context_speaker2")
-        speaker = "general"
-        suncoumt = "IdIDGadis"
+        speaker = "Jessa"
+        suncoumt = 0
         save_path = r"C:\Users\v-zhazhai\Downloads"
-        locale = "id-id"
-        general = "IdIDGadis"
+        locale = "zh-cn"
+        general = "general"
         not_fold(speaker,suncoumt,save_path,locale,general)

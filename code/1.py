@@ -55,23 +55,34 @@ def wave_Style_Statistics(inputdir):
     # f = read(inputdir)
     time_count = f.getparams().nframes/f.getparams().framerate
     return os.path.basename(inputdir).split('_')[1]+'\t'+ str(time_count)
+
+def fast_transcription_result_wus2(ft_result_file):    
+    with open(ft_result_file, "r", encoding="utf-8") as f:
+        ft_result = json.load(f)
+        total_duration = (ft_result.get("durationMilliseconds", 0) / 1000)  # Convert milliseconds to seconds
+        print(f"Total duration: {total_duration} seconds")
     
+        segment_total_duration = 0
+        segments = ft_result.get("phrases", [])
+        for segment in segments:
+            segment_duration = (
+                segment.get("durationMilliseconds", 0) / 1000
+            )  # Convert milliseconds to seconds
+            segment_total_duration += segment_duration
+    
+    print(f"Total duration of segments: {segment_total_duration} seconds")
+
+def get_trans(txtfile,savedir):
+    with open(txtfile, 'r', encoding='utf8') as f:
+        lines = f.readlines()
+    
+    if not os.path.exists(savedir):
+        os.makedirs(savedir)
+    
+    for line in lines:
+        with open(os.path.join(savedir,line.split('\t')[0]+".txt"),'w',encoding='utf8') as s:
+            s.writelines(line.split('\t')[-1])
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Downloads\EMNS\raw_webm_wave"
-    # trasnfile = r"C:\Users\v-zhazhai\debug\richland\xmly_zhcnenus_learning_output\E2E_trans.txt"
-    # savefiles = r"C:\Users\v-zhazhai\debug\richland\xmly_zhcnenus_learning_output\E2E_trans_punc.txt"
-    with open(inputdir+".txt",'w',encoding='utf8') as s:
-        for line in os.listdir(inputdir):
-            if '.json' in line :
-                try:
-                    jsonfile = os.path.join(inputdir,line)
-                    word = read_json(jsonfile)
-                    s.writelines(word+'\n')
-                except Exception as e:
-                    print(f"Failed due to {e}")
-                    continue
-            # word = wave_Style_Statistics(os.path.join(inputdir,line))
-                # s.writelines(word+'\n')
-    # clean_trans(trasnfile,savefiles)
-    
+    get_trans(r"C:\Users\v-zhazhai\Desktop\Scripts01_clean.txt",
+              r"C:\Users\v-zhazhai\Desktop\trans")
     
