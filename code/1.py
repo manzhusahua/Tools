@@ -76,13 +76,31 @@ def get_trans(txtfile,savedir):
     with open(txtfile, 'r', encoding='utf8') as f:
         lines = f.readlines()
     
-    if not os.path.exists(savedir):
-        os.makedirs(savedir)
+    os.makedirs(savedir, exist_ok=True)
     
     for line in lines:
-        with open(os.path.join(savedir,line.split('\t')[0]+".txt"),'w',encoding='utf8') as s:
-            s.writelines(line.split('\t')[-1])
+        try:
+            savedirs = os.path.join(savedir,line.split('\t')[0].split("/")[0])
+            os.makedirs(savedirs, exist_ok=True)
+            with open(os.path.join(savedirs,line.split('\t')[0].split("/")[-1].replace(".wav",".txt")),'w',encoding='utf8') as s:
+                s.writelines(line.split('\t')[-1])
+        except Exception as e:
+            print(f"Error processing line {line}: {e}")
+
+def get_transcription_result(ft_result_file):
+    with open(ft_result_file, "r", encoding="utf-8") as f,open(ft_result_file.replace('.txt','_clean.txt'), 'w', encoding='utf-8') as s:
+        for line in f.readlines():
+            if ".json" not in line:
+                s.writelines(line)
+        
+def average_duration(filelist,cleanlist):
+    word = open(cleanlist, 'r', encoding='utf8').readlines()
+    with open(filelist,'r',encoding='utf8') as f,open(filelist.replace('.txt','_average.txt'),'w',encoding='utf8') as s:
+        for line in f.readlines():
+            # print(line)
+            if line in word:
+                s.writelines(line)
+
 if __name__ == "__main__":
-    get_trans(r"C:\Users\v-zhazhai\Desktop\Scripts01_clean.txt",
-              r"C:\Users\v-zhazhai\Desktop\trans")
-    
+    # get_trans(r"C:\Users\v-zhazhai\Downloads\filenames.txt",r"C:\Users\v-zhazhai\Downloads\trans")
+    average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_50.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json1_batch10.txt")

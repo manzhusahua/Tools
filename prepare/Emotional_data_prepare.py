@@ -5,7 +5,8 @@ import codecs
 import chardet
 import shutil
 import re
-
+import glob
+import requests
 
 class CREMA_D:
     def get_other(name, csvfiles):
@@ -373,11 +374,134 @@ class AISHELL_3:
                 print(f"name is {line}")
                 continue
 
+class URDU:
+    def prepare_json(inputdir, outputdir):
+        Gender_map = {"M":"Male","F":"Female"}
+        Emotion_map = {"A":"Angery","H":"Happy","N":"Neutral","S":"Sad"}
+        for file_path in glob.glob(os.path.join(inputdir, "**", "*.wav"), recursive=True):
+            AudioFileName = os.path.basename(file_path)
+            Gender = AudioFileName.split("_")[0][1]
+            Emotion = AudioFileName.split("_")[0][0]
+            row_values = {
+                "AudioFileName": "{}".format(AudioFileName),
+                "Gender": "{}".format(Gender_map[Gender]),
+                "Emotion": "{}".format(Emotion_map[Emotion]),
+                "DataName": "{}".format("URDU-Dataset"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir, AudioFileName.replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
 
+class TurEVDB:
+    def prepare_json(inputdir, outputdir):
+        for file_path in glob.glob(os.path.join(inputdir, "**", "*.wav"), recursive=True):
+            AudioFileName = os.path.basename(file_path)
+            Emotion = os.path.split(file_path)[0].split('\\')[-1]
+            # print(Emotion)
+            row_values = {
+                "AudioFileName": "{}".format(AudioFileName),
+                "Emotion": "{}".format(Emotion),
+                "DataName": "{}".format("TurEV-DB"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir, AudioFileName.replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
 
+class Thorsten:
+    def prepare_json(inputdir):
+        data = pd.read_csv(r"C:\Users\v-zhazhai\Downloads\thorsten-emotional_v02\thorsten-emotional_v02\thorsten-emotional-metadata.csv", sep="|", encoding="utf-8", low_memory=False)
+        for file_path in glob.glob(os.path.join(inputdir, "**", "*.wav"), recursive=True):
+            AudioFileName = os.path.basename(file_path)
+            Emotion = os.path.split(file_path)[0].split('\\')[-1]
+            Trans = data.iloc[int(list(data['sid']).index(AudioFileName.replace(".wav","")))]["trans"]
+            row_values = {
+                "AudioFileName": "{}".format(AudioFileName),
+                "Trans": "{}".format(Trans),
+                "Emotion": "{}".format(Emotion),
+                "DataName": "{}".format("thorsten-emotional_v02"),
+                "Source": "emotional",
+                }
+            with open(file_path.replace(".wav",".json"),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+            with open(file_path.replace(".wav",".txt"),"w",encoding="utf8",) as save_txt:
+                save_txt.writelines(Trans+'\n')
+
+class SyntAct:
+    def prepare_json(inputdir,outputdir):
+        maplist = {"de1":"male","de2":"female","de3":"male","de4":"female","de6":"male","de7":"female"}
+        for file_path in glob.glob(os.path.join(inputdir, "**", "*.wav"), recursive=True):
+            AudioFileName = os.path.basename(file_path)            
+            row_values = {
+                "AudioFileName": "{}".format(AudioFileName),
+                "Emotion": "{}".format(AudioFileName.split("_")[1]),
+                "Gender": "{}".format(maplist[AudioFileName.split("_")[0]]),
+                "DataName": "{}".format("SyntAct"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir, AudioFileName.replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+
+class RESD:
+    def download(url,filename):
+        # 发起请求并保存文件
+        response = requests.get(url)
+        if response.status_code == 200:
+            with open(filename, "wb") as f:
+                f.write(response.content)
+            print(f"音频已保存为 {filename}")
+        else:
+            print(f"下载失败，状态码: {response.status_code}")
+    def prepare_json(inputdir,outputdir):
+        jsonfile = r"C:\Users\v-zhazhai\Downloads\RESD.json"
+        with open(jsonfile, "r",encoding='utf8') as file:
+            data = json.load(file)
+        for line in data["rows"]:
+            wave_name = line["row"]["name"]
+            speech  = line["row"]["speech"][0]["src"]
+            # print(speech)
+            RESD.download(speech,os.path.join(inputdir,wave_name+".wav"))
+            
+            row_values = {
+                "AudioFileName": "{}".format(wave_name),
+                "Emotion": "{}".format(line["row"]["emotion"]),
+                "Trans": "{}".format(line["row"]["text"]),
+                "DataName": "{}".format("RESD"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir, wave_name+".json"),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+            with open(os.path.join(outputdir,wave_name+".txt"),'w',encoding='utf8') as s:
+                s.writelines(line["row"]["text"])
+
+class SUBESCO:
+    def prepare_json(inputdir,outputdir):
+        Gender_map = {"M":"Male","F":"Female"}
+        content=codecs.open(r"C:\Users\v-zhazhai\Downloads\SUBESCO1.txt",'rb').read()
+        word = open(r"C:\Users\v-zhazhai\Downloads\SUBESCO1.txt",'r',encoding=chardet.detect(content)['encoding']).readlines()
+        with open(inputdir,'r',encoding='utf8') as f:
+            for line in f.readlines():
+                # print(line)
+                wave_name = line.replace("\n","")
+                # print(wave_name.split("_")[-3])
+                row_values = {
+                "AudioFileName": "{}".format(wave_name),
+                "Gender": "{}".format(Gender_map[wave_name.split("_")[0]]),
+                "Emotion": "{}".format(wave_name.split("_")[-2]),
+                "Trans": "{}".format(word[int(wave_name.split("_")[-3])-1].replace("\n","")),
+                "DataName": "{}".format("SUBESCO"),
+                "Source": "emotional",
+                }
+                with open(os.path.join(outputdir, wave_name+".json"),"w",encoding="utf8",) as save_json:
+                    json.dump(row_values, save_json, indent=4)
+                with open(os.path.join(outputdir,wave_name+".txt"),'w',encoding='utf8') as s:
+                    s.writelines(word[int(wave_name.split("_")[-3])-1])
+    
+    
+    
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Desktop\data_aishell3\content.txt"
-    outputdir = r"C:\Users\v-zhazhai\Desktop\data_aishell3\train"
+    inputdir = r"C:\Users\v-zhazhai\Downloads\SUBESCO.txt"
+    outputdir = r"C:\Users\v-zhazhai\Downloads\SUBESCO\trans"
     if not os.path.exists(outputdir):
         os.makedirs(outputdir, exist_ok=True)
-    AISHELL_3.prepare_json(inputdir, outputdir)
+    SUBESCO.prepare_json(inputdir, outputdir)
+    # Thorsten.prepare_json(inputdir)
