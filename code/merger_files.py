@@ -22,6 +22,12 @@ class MERGERDIR():
                     with open(file_path, 'r', encoding='utf-8') as infile:
                         outfile.write(infile.read())
                         # outfile.write("\n")  # 添加换行符以分隔文件内容
+    def merger_to_all(self,folder_path,output_file):
+        with open(output_file, 'w', encoding='utf-8') as outfile:
+            for file in glob.glob(os.path.join(folder_path, "**", "*.txt"), recursive=True):
+                content=codecs.open(file,'rb').read()
+                f = open(file,'r',encoding=chardet.detect(content)['encoding']).read()
+                outfile.writelines(f+'\n') 
 INPUT_STEP = None
 
 def init():
@@ -38,6 +44,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     merger_dir = MERGERDIR()
 
-    inpudir = r"C:\Users\v-zhazhai\Desktop\en-us_youtube\20250226"
-    outputdir = r"C:\Users\v-zhazhai\Downloads\zh-CN\zhCN_140k"
-    merger_dir.merger_files(inpudir)
+    inpudir = r"C:\Users\v-zhazhai\Downloads\dataset\tier4\uk-ua\podcast_rss"
+    outputdir = r"C:\Users\v-zhazhai\Downloads\dataset\tier4\uk-ua\podcast_rss\all.txt"
+    merger_dir.merger_to_all(inpudir,outputdir)

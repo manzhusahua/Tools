@@ -4,7 +4,8 @@
 
 import pandas as pd
 def updata_xml(metadatfile,xmlfile):
-    data1 = ["pd.read_csv(metadatfile,sep="|",encoding='utf8',low_memory=False)"]
+    data1 = pd.read_csv(metadatfile,sep="|",encoding='utf8',low_memory=False)
+    print(data1)
     n=0
     with open(xmlfile,'r',encoding='utf8') as f,open(xmlfile.replace(".xml","_V1.xml"),'w',encoding='utf8') as s:
         for line in f.readlines():
@@ -17,4 +18,4 @@ def updata_xml(metadatfile,xmlfile):
 
 
 if __name__ == "__main__":
-    updata_xml(r"C:\Users\v-zhazhai\Desktop\input\metadata.csv",r"C:\Users\v-zhazhai\Desktop\input\script\input.xml")
+    updata_xml(r"C:\Users\v-zhazhai\Downloads\metadata.csv",r"C:\Users\v-zhazhai\Downloads\input_files.xml")

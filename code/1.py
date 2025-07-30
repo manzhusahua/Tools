@@ -8,6 +8,7 @@ import wave
 import os
 import glob
 from scipy.io.wavfile import read
+import shutil
 
 def read_json(jsonfile):
     # 打开 JSON 文件
@@ -101,6 +102,25 @@ def average_duration(filelist,cleanlist):
             if line in word:
                 s.writelines(line)
 
+def renames(inputdir,outputdir):
+    os.makedirs(outputdir, exist_ok=True)
+    n=0
+    with open(os.path.join(os.path.split(outputdir)[0],"map.txt"),'w',encoding='utf8') as s:
+        for file in glob.glob(os.path.join(inputdir,"**\\*.*"), recursive=True):
+            name = os.path.basename(file)
+            rename = str(n).zfill(8)+"."+file.split(".")[-1]
+            shutil.copyfile(file,os.path.join(outputdir,rename))
+            s.writelines(file+'\t'+os.path.join(outputdir,rename)+'\n')
+            n+=1
+
+def read_info(infofile):
+    word = READFILE().read_file(infofile)
+    print(word)
+               
 if __name__ == "__main__":
-    # get_trans(r"C:\Users\v-zhazhai\Downloads\filenames.txt",r"C:\Users\v-zhazhai\Downloads\trans")
-    average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_50.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json1_batch10.txt")
+    # # get_trans(r"C:\Users\v-zhazhai\Downloads\filenames.txt",r"C:\Users\v-zhazhai\Downloads\trans")
+    # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_0-15.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
+    # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_15-35.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
+    # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_35-50.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
+    # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_50.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
+    read_info(r"C:\Users\v-zhazhai\Downloads\chunk_1aaaf19763e993534d35e7f72d323c01_107.info")

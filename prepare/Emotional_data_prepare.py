@@ -496,12 +496,52 @@ class SUBESCO:
                 with open(os.path.join(outputdir,wave_name+".txt"),'w',encoding='utf8') as s:
                     s.writelines(word[int(wave_name.split("_")[-3])-1])
     
-    
-    
+class nEMO:
+     def prepare_json(inputdir,outputdir):
+         data1 = pd.read_csv(inputdir, sep="\t", encoding="utf8", low_memory=False)
+         index = list(range(data1.shape[0]))
+         for i in index:
+            row_values = {
+                "AudioFileName": "{}".format(data1.iloc[i]["file_id"]),
+                "Gender": "{}".format(data1.iloc[i]["gender"]),
+                "Age": "{}".format(data1.iloc[i]["age"]),
+                "Emotion": "{}".format(data1.iloc[i]["emotion_expressed"]),
+                "Raw_text": "{}".format(data1.iloc[i]["raw_text"]),
+                "Normalized_text": "{}".format(data1.iloc[i]["normalized_text"]),
+                "DataName": "{}".format("nEMO"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir, data1.iloc[i]["file_id"].replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+            with open(os.path.join(outputdir,data1.iloc[i]["file_id"].replace(".wav",".txt")),'w',encoding='utf8') as s:
+                s.writelines(data1.iloc[i]["raw_text"]+'\n')
+
+class emozionalmente_dataset:
+    def prepare_json(inputdir,outputdir):
+         data1 = pd.read_csv(inputdir, sep="\t", encoding="utf8", low_memory=False)
+         index = list(range(data1.shape[0]))
+         for i in index:
+            row_values = {
+                "AudioFileName": "{}".format(data1.iloc[i]["file_name"]),
+                "Gender": "{}".format(data1.iloc[i]["gender"]),
+                "Age": "{}".format(data1.iloc[i]["age"]),
+                "Emotion": "{}".format(data1.iloc[i]["emotion_recognized"]),
+                "Trans": "{}".format(data1.iloc[i]["sentence"]),
+                "audio_quality": "{}".format(data1.iloc[i]["audio_quality"]),
+                "DataName": "{}".format("emozionalmente_dataset"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir, data1.iloc[i]["file_name"].replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+            with open(os.path.join(outputdir,data1.iloc[i]["file_name"].replace(".wav",".txt")),'w',encoding='utf8') as s:
+                s.writelines(data1.iloc[i]["sentence"]+'\n')
+
+
+
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Downloads\SUBESCO.txt"
-    outputdir = r"C:\Users\v-zhazhai\Downloads\SUBESCO\trans"
+    inputdir = r"C:\Users\v-zhazhai\Downloads\emozionalmente_dataset\emozionalmente_dataset\metadata\meger.csv"
+    outputdir = r"C:\Users\v-zhazhai\Downloads\emozionalmente_dataset\trans"
     if not os.path.exists(outputdir):
         os.makedirs(outputdir, exist_ok=True)
-    SUBESCO.prepare_json(inputdir, outputdir)
+    emozionalmente_dataset.prepare_json(inputdir, outputdir)
     # Thorsten.prepare_json(inputdir)

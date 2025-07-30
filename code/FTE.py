@@ -3,6 +3,7 @@ import glob
 import codecs
 import chardet
 import shutil
+import json
 
 def ChaiQing(inputdir):
     for file_path in glob.glob(os.path.join(inputdir, "**", "*.txt"), recursive=True):
@@ -47,8 +48,36 @@ def XiWang(transfile,wavefolder,savedir):
     for n in range(0,len(word)):
         with open(os.path.join(savedir,wavelist[n].replace(".wav",".txt")),'w',encoding='utf8') as s:
             s.writelines(word[n])
-        
+
+
+def TTS_v3_Prepare(transdir,savedir):
+    os.makedirs(savedir, exist_ok=True)
+    for file_path in glob.glob(os.path.join(transdir, "**", "*.txt"), recursive=True):
+        savepath = os.path.join(savedir,os.path.basename(file_path).replace(".txt",""))
+        os.makedirs(savepath, exist_ok=True)
+        # print(file_path)
+        content=codecs.open(file_path,'rb').read()
+        word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()
+        for line in word:
+            # print(line)
+            if "\t" in line:
+                with open(os.path.join(savepath,line.split('\t')[0]+".txt"),'w',encoding='utf8') as s:
+                    s.writelines(line.split('\t')[-1])
+                wave_path = os.path.join("\\ttsdata\ttsdata\et-EE\Voices\Anu\Speech\Wave48k",os.path.basename(file_path).replace(".txt",""),line.split('\t')[0]+".wav")
+                row_values = {
+                    "AudioFileName": "{}".format(wave_path),
+                    "Gender": "{}".format("Male"),
+                    "Speaker": "{}".format("EtEEAnu"),
+                    "Trans": "{}".format(line.split('\t')[-1].replace("\n","")),
+                    }
+                with open(os.path.join(savepath,line.split('\t')[0]+".json"),"w",encoding="utf8",) as save_json:
+                    json.dump(row_values, save_json, indent=4)
+            else:
+                continue
+            
 
 if __name__ == "__main__":
-    WenningWei(r"C:\Users\v-zhazhai\Downloads\En-US-Dict\Scripts.txt",r"C:\Users\v-zhazhai\Downloads\En-US-Dict\Scripts")
+    # WenningWei(r"C:\Users\v-zhazhai\Downloads\M400_recut_20250707\0010001-0010500_1.txt",r"C:\Users\v-zhazhai\Downloads\trans")
     # ChaiQing(r"C:\Users\v-zhazhai\Desktop\prepare")
+    # XiWang(r"C:\Users\v-zhazhai\Downloads\weiwei\XpengM100_Wei_Podcast_original_data_Mix\哪吒.txt",r"C:\Users\v-zhazhai\Downloads\weiwei\XpengM100_Wei_Podcast_original_data_Mix\哪吒",r"C:\Users\v-zhazhai\Downloads\weiwei\XpengM100_Wei_Podcast_original_data_Mix\trans\哪吒")
+    TTS_v3_Prepare(r"\\ttsdata\ttsdata\et-EE\Voices\Anu\TextScripts",r"C:\Users\v-zhazhai\Desktop\prepare_V3\EtEEAnu")

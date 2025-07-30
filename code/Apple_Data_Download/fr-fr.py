@@ -2,7 +2,7 @@ import os.path
 import shutil
 from datetime import datetime
 import requests,json
-import re
+import re,os
 from selenium import webdriver
 import time,random
 from lxml import etree
@@ -22,48 +22,63 @@ driver.maximize_window()
 headers={'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 Edg/128.0.0.0",
          'referer':"https://pixabay.com/sound-effects/search/laugh/"}
 
-SAS_token='?sv=2023-01-03&st=2024-12-15T09%3A29%3A28Z&se=2024-12-21T09%3A29%3A00Z&skoid=ee0abe40-c783-4ec3-9f28-341c64cfe859&sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&skt=2024-12-15T09%3A29%3A28Z&ske=2024-12-21T09%3A29%3A00Z&sks=b&skv=2023-01-03&sr=c&sp=racwdxltf&sig=x6NSiB1YTZLmrq10U%2FmPFN4vFeHDuqEHwTTL906AwQ8%3D'
-azcopy_path=r"D:\v-huayuecao\Apple_Data_Download\azcopy.exe"
-OUT_DIR=r"C:\Users\v-zhazhai\Desktop\Apple_data\batch02"
+SAS_token=''
+azcopy_path=r"azcopy.exe"
+OUT_DIR=r"C:\Users\v-zhazhai\Downloads\ApplePodcast"
+os.makedirs(OUT_DIR, exist_ok=True)
+#https://stdstoragettsdp01eus.blob.core.windows.net/data/v-litfen/apple/tier3/sa/podcast/raw/data_batch01/
 OUT_blobdir=r'https://stdstoragettsdp01eus.blob.core.windows.net/data/v-litfen/apple/tier1/jajp/podcast/raw/data_batch01/'
-# url=f"https://podcasts.apple.com/gb/charts"
-#
-# driver.get(url)
-# time.sleep(1)
-# driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-# time.sleep(2)
-# button=driver.find_element(by=By.XPATH,value='/html/body/div/div/div[2]/main/div/div[2]/div[1]/div[1]/h2/button')
-# button.click()
-# while True:
-#     button = driver.find_elements(by=By.XPATH, value='//ul[@class="grid svelte-1kdxsjw grid--flow-row"]/li/div/a')
-#     num1 = len(button)
-#     # print(num1)
-#     for _ in range(50):
-#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-#         action = ActionChains(driver)
-#         action.send_keys(Keys.ARROW_DOWN).perform()
-#         driver.execute_script('window.scrollBy(0,4000)')
-#         action = ActionChains(driver)
-#         action.send_keys(Keys.ARROW_DOWN).perform()
-#         time.sleep(2)
-#     button = driver.find_elements(by=By.XPATH, value='//ul[@class="grid svelte-1kdxsjw grid--flow-row"]/li/div/a')
-#     num2 = len(button)
-#     # print(num2)
-#     if num2 == num1:
-#         break
-# # print(len(button))
-# search_list_url=[]
-# if len(button)!=0:
-#     for i in button:
-#         search_list_url.append(i.get_attribute("href"))
-
-search_list_url=["https://podcasts.apple.com/fr/podcast/nader-abou-anas/id1596758305"]
-a=1
+search_list_url= ["https://podcasts.apple.com/de/podcast/tomorrow-business-stars-lifestyle/id1524307880","https://podcasts.apple.com/br/podcast/a-hora/id1753993865"]
 for i in search_list_url:
     print(i)
     b = 1
     driver.get(i)
     time.sleep(5)
+    # 检查是否已经登录
+    # def is_logged_in():
+    #     try:
+    #         # 查找登录按钮，若找不到，说明已登录
+    #         sign_in_button = driver.find_element(By.XPATH, "//button[@data-testid='sign-in-button']")
+    #         return False  # 还没有登录，登录按钮仍然存在
+    #     except Exception as e:
+    #         return True  # 找不到登录按钮，说明已经登录
+
+    # # 如果未登录，则执行登录流程
+    # if not is_logged_in():
+    #     # 点击登录按钮  /html/body/div/div/div[2]/div/div/amp-chrome-player/div[2]/div[2]/button
+    #     button = driver.find_element(by=By.XPATH, value='/html/body/div/div/div[2]/div/div/amp-chrome-player/div[2]/div[2]/button')
+    #     # button = driver.find_element(by=By.XPATH, value="//button[@data-testid='sign-in-button']")
+    #     button.click()
+    #     apple_id = 'moonenhy@gmail.com'  # 请替换为你的 Apple ID
+    #     password = 'Yueliang1'  # 请替换为你的密码
+
+    #     iframe = WebDriverWait(driver, 20).until( EC.presence_of_element_located((By.XPATH, '//iframe[contains(@src, "authenticate")]')))
+    #     # 切换到 iframe
+    #     driver.switch_to.frame(iframe)
+
+    #     # 等待并定位 Apple ID 输入框，输入 Apple ID
+    #     apple_id_input = WebDriverWait(driver, 20).until( EC.visibility_of_element_located((By.XPATH, '//input[@id="accountName"]')))
+    #     apple_id_input.send_keys(apple_id)  # 输入 Apple ID
+
+    #     button = driver.find_element(by=By.XPATH,value='/html/body/div[1]/div/div/div[1]/cwc-app/div/div/div[3]/button/span')
+    #     button.click()
+    #     # 等待密码框加载
+    #     time.sleep(30)
+
+    #     WebDriverWait(driver, 30).until(EC.frame_to_be_available_and_switch_to_it((By.XPATH, '//iframe[@id="aid-auth-widget-iFrame"]')))
+    #     # 定位密码输入框并输入密码
+    #     password_input =  WebDriverWait(driver, 30).until( EC.visibility_of_element_located((By.XPATH, '//input[@id="password_text_field"]')))  # 假设密码输入框的 id 为 password
+    #     # password_input = driver.find_element(By.XPATH, '//input[@id="password_text_field"]')  # 假设密码输入框的 id 为 password
+    #     password_input.send_keys(password)  # 输入密码
+    #     # 提交登录信息
+    #     login_button = driver.find_element(By.XPATH, '//button[@id="sign-in"]')
+    #     login_button.click()
+
+    #     # # 切换回主页面（如果需要）
+    #     driver.switch_to.default_content()
+    
+    # time.sleep(5)
+    # driver.get(i)
     # try:
     #     button = driver.find_element(by=By.XPATH, value='//*[@class="headings__metadata-bottom svelte-1scg3f0"]/ul/li[@class="metadata__explicit-badge svelte-11a0tog"]')
     # except:
@@ -83,7 +98,7 @@ for i in search_list_url:
     except:
         print("已经到顶了")
     time.sleep(2)
-    button = driver.find_elements(by=By.XPATH, value='//li[@class="svelte-8rlk6b"]/div/a')
+    button = driver.find_elements(by=By.XPATH, value='//li[@class="svelte-834w84"]/div/a')
     num1 = len(button)
     print(num1)
     button = driver.find_elements(by=By.XPATH,
@@ -94,7 +109,7 @@ for i in search_list_url:
         if not os.path.exists(outdir):
             os.makedirs(outdir)
         while True:
-            button = driver.find_elements(by=By.XPATH, value='//li[@class="svelte-8rlk6b"]/div/a')
+            button = driver.find_elements(by=By.XPATH, value='//li[@class="svelte-834w84"]/div/a')
             num1 = len(button)
             # print(num1)
             for _ in range(50):
@@ -105,7 +120,7 @@ for i in search_list_url:
                 action = ActionChains(driver)
                 action.send_keys(Keys.ARROW_DOWN).perform()
                 time.sleep(2)
-            button = driver.find_elements(by=By.XPATH, value='//li[@class="svelte-8rlk6b"]/div/a')
+            button = driver.find_elements(by=By.XPATH, value='//li[@class="svelte-834w84"]/div/a')
             num2 = len(button)
             # print(num2)
             if num2 == num1:
@@ -120,10 +135,10 @@ for i in search_list_url:
             for i in list1:
                 dict1 = {}
                 driver.get(i)
-                time.sleep(2)
+                time.sleep(3)
                 # audio_button = driver.find_element(by=By.XPATH,value="/html/body/div/div/div[2]/main/div/div[1]/div/div/div[2]/div/div/div/button")
                 audio_button = driver.find_element(by=By.XPATH,
-                                                   value='//*[@class="button svelte-okjphp primary"]/button')
+                                                   value='//*[@class="button svelte-yk984v primary"]/button')
                 audio_button.click()
                 time.sleep(5)
                 try:
@@ -193,12 +208,17 @@ for i in search_list_url:
                     continue
             # a = a + 1
         # azcommand = f'{azcopy_path} copy "{outdir}/*" "{blobdir}{SAS_token}"'
-        # os.system(azcommand)
-        # # shutil.rmtree(outdir)
-        # if os.path.exists(outdir):
-        #     # 尝试删除目录
-        #     try:
-        #         shutil.rmtree(outdir)
-        #         print("目录已删除")
-        #     except OSError as e:
-        #         print(f"无法删除目录: {e}")
+        # # 执行上传命令
+        # upload_status = os.system(azcommand)
+
+        # # 检查上传是否成功
+        # if upload_status == 0:
+        #     print("上传成功，准备删除目录...")
+        #     if os.path.exists(outdir):
+        #         try:
+        #             shutil.rmtree(outdir)
+        #             print("目录已删除")
+        #         except OSError as e:
+        #             print(f"无法删除目录: {e}")
+        # else:
+        #     print("上传失败，目录不会删除。")
