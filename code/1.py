@@ -81,9 +81,10 @@ def get_trans(txtfile,savedir):
     
     for line in lines:
         try:
-            savedirs = os.path.join(savedir,line.split('\t')[0].split("/")[0])
-            os.makedirs(savedirs, exist_ok=True)
-            with open(os.path.join(savedirs,line.split('\t')[0].split("/")[-1].replace(".wav",".txt")),'w',encoding='utf8') as s:
+            # savedirs = os.path.join(savedir,line.split('\t')[0].split("/")[0])
+            # os.makedirs(savedirs, exist_ok=True)
+            # with open(os.path.join(savedirs,line.split('\t')[0].split("/")[-1].replace(".wav",".txt")),'w',encoding='utf8') as s:
+            with open(os.path.join(savedir,line.split('\t')[0]+".txt"),'w',encoding='utf8') as s:
                 s.writelines(line.split('\t')[-1])
         except Exception as e:
             print(f"Error processing line {line}: {e}")
@@ -116,11 +117,20 @@ def renames(inputdir,outputdir):
 def read_info(infofile):
     word = READFILE().read_file(infofile)
     print(word)
-               
+  
+             
 if __name__ == "__main__":
-    # # get_trans(r"C:\Users\v-zhazhai\Downloads\filenames.txt",r"C:\Users\v-zhazhai\Downloads\trans")
+    get_trans(r"C:\Users\v-zhazhai\Downloads\1\vi.txt",r"C:\Users\v-zhazhai\Desktop\vi")
     # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_0-15.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
     # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_15-35.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
     # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_35-50.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
     # average_duration(r"C:\Users\v-zhazhai\Downloads\filelist_50.txt",r"C:\Users\v-zhazhai\Downloads\v3_input_json.txt")
-    read_info(r"C:\Users\v-zhazhai\Downloads\chunk_1aaaf19763e993534d35e7f72d323c01_107.info")
+    # read_info(r"C:\Users\v-zhazhai\Downloads\chunk_1aaaf19763e993534d35e7f72d323c01_107.info")
+    # with open(r"C:\Users\v-zhazhai\Downloads\all_20250304.txt",'r',encoding="utf8") as f,open(r"C:\Users\v-zhazhai\Downloads\all_20250304_clean.txt",'w',encoding="utf8") as s:
+    #     words = []
+    #     for line in f.readlines():
+    #         lines = "/".join(line.split('/')[:-1])
+    #         if lines not in words:
+    #             words.append(lines)
+    #     for word in words:
+    #         s.writelines(word+'\n')

@@ -27,9 +27,28 @@ def get_wav_time2(wav_list):
             time_counts.append(time_count)
     print(sum(time_counts))
     print(str(round(sum(time_counts)/3600, 5)))
-                
+
+
+import eyed3
+
+def get_duration_mp3(file_path):
+    """
+    获取mp3音频文件时长
+    :param file_path:
+    :return:
+    """
+    time_counts=[]
+    for line in os.listdir(file_path):
+        
+        mp3Info = eyed3.load(os.path.join(file_path,line))
+        # print(type(mp3Info.info.time_secs))
+        # print(float(mp3Info))
+        time_counts.append(mp3Info.info.time_secs)
+    print(sum(time_counts))
+    print(str(round(sum(time_counts)/3600, 5)))
+ 
 if __name__ == "__main__":
-    wav_list = sys.argv[1]
-    # wav_list = r'C:\Users\v-zhazhai\Downloads\zhcn'
+    # wav_list = sys.argv[1]
+    wav_list = r"C:\Users\v-zhazhai\Downloads\de-at"
     # get_wav_time(wav_list)
-    get_wav_time2(wav_list)
+    get_duration_mp3(wav_list)
