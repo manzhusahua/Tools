@@ -537,11 +537,79 @@ class emozionalmente_dataset:
                 s.writelines(data1.iloc[i]["sentence"]+'\n')
 
 
+class ASVP_ESD:
+    def prepare_json(self,infofile,savefile):
+        for file_path in glob.glob(os.path.join(infofile, "**", "original_fname"), recursive=True):
+            # 03-01-01-01-01-116-02-02-02-05
+            content=codecs.open(file_path,'rb').read()
+            word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()[0]
+            names = os.path.basename(word)
+            save_additional_info = file_path.replace("original_fname","additional_info")
+            # if names.split("-")[-1] == "66.wav":
+                # print(names)
+            additional_info = {}
+            additional_info["AudioFileName"] = names
+                
+            # Modality
+            if names.split("-")[0] == "03":
+                additional_info["Modality"] = "audio-only"
+                
+            # Vocal channel
+            if names.split("-")[1] == "01":
+                additional_info["Vocal channel"] = "speech"
+            elif names.split("-")[1] == "02":
+                additional_info["Vocal channel"] = "non speech"
+            else:
+                additional_info["Vocal channel"] = "Unknown"            
+            # Gender
+            if int(names.split("-")[5])%2==0:
+                additional_info["Gender"] = "male"
+            else:                
+                additional_info["Gender"] = "female"            
+            if names.split("-")[-1] == "66.wav":
+                additional_info["Audio type"] = "Mixed voice"   
+                with open(save_additional_info,'w',encoding='utf8') as s:
+                    s.writelines(str(additional_info))
+                continue
+            try:
+                # Style
+                stylemap = {"01":"boredom","02":"neutral","03":"happy","04":"sad","05":"angry","06":"fearful","07":"disgust","08":"surprised","09":"excited","10":"pleasure","11":"pain","12":"disappointmen","13":"breath"}
+                additional_info["Style"] = stylemap[names.split("-")[2]]
+                
+                # Emotional intensity
+                Emotional_intensitymap = {"01":"normal","02":"high"}
+                additional_info["Emotional intensity"] = Emotional_intensitymap[names.split("-")[3]]
+                
+   
 
+                # Age
+                Agemplist = {"01":"above 65", "02":"between 20~64", "03":"under 20","04":"baby"}
+                try:
+                    additional_info["Age"] = Agemplist[names.split("-")[6]]
+                except Exception as e:
+                    additional_info["Age"] = "Unknown"
+            except Exception as e:
+                print(word)
+            with open(save_additional_info,'w',encoding='utf8') as s:
+                s.writelines(str(additional_info))
+
+
+class EmotionPerceptionInSchizophrenia:
+    def prepare_json(self,infofile,savefile):
+        for file_path in glob.glob(os.path.join(infofile, "**", "original_fname"), recursive=True):
+            content=codecs.open(file_path,'rb').read()
+            word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()[0]
+            additional_info = {}
+            additional_info["AudioFileName"] = os.path.basename(word)
+            stylemap = {"S_assignmentA":"angry","S_assignmentH":"happy","S_assignmentN":"neutral","S_ferryA":"angry","S_ferryH":"happy","S_ferryN":"neutral"}
+            additional_info["Style"] = stylemap[os.path.basename(word).replace(".wav","")]
+            with open(file_path.replace("original_fname","additional_info"),'w',encoding='utf8') as s:
+                s.writelines(str(additional_info))
+                
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Downloads\emozionalmente_dataset\emozionalmente_dataset\metadata\meger.csv"
-    outputdir = r"C:\Users\v-zhazhai\Downloads\emozionalmente_dataset\trans"
-    if not os.path.exists(outputdir):
-        os.makedirs(outputdir, exist_ok=True)
-    emozionalmente_dataset.prepare_json(inputdir, outputdir)
+    inputdir = r"C:\Users\v-zhazhai\Downloads\emotional\chunk_c8e9f3f1875ad6389e6131e78c41097e_0.info_files"
+    outputdir = r"C:\Users\v-zhazhai\Downloads\emotional\updata\chunk_a0ab6d9cb9ca94755fae4c2cc67f5a4c_2.info"
+    # if not os.path.exists(outputdir):
+    #     os.makedirs(outputdir, exist_ok=True)
+    EmotionPerceptionInSchizophrenia().prepare_json(inputdir, outputdir)
     # Thorsten.prepare_json(inputdir)

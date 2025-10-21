@@ -20,9 +20,19 @@ def find(files):
                     word.append(i)
                     s.writelines(i)
 
-
+def clean_list(inputdir,savedir,word):
+    
+    with open(inputdir,'r',encoding='utf8') as f:
+        for line in f.readlines():
+            if ".wav;" in line:
+                batchname = line.split("/")[0].replace("INFO: ","")
+                wav_name = line.split(";")[0].replace("INFO: ","")
+                with open(os.path.join(savedir,batchname+'.txt'),'a',encoding='utf8') as s:
+                    s.writelines("/".join([word,wav_name])+"\n")
+    
 if __name__ == "__main__":
-    files = r"D:\users\v-zhazhai\TTS\zh-CN\OPOP\xiaobu\batch_4_repeat_prompt\batch_4_repeat_prompt_clean.txt"
+    # files = r"D:\users\v-zhazhai\TTS\zh-CN\OPOP\xiaobu\batch_4_repeat_prompt\batch_4_repeat_prompt_clean.txt"
     # clean(files)
-    find(files)
+    # find(files)
+    clean_list(r"C:\Users\v-zhazhai\Downloads\filelist\te-IN.txt",r"C:\Users\v-zhazhai\Downloads\filelist\filelist","/datablob/TTS_ChunkData/Youtube/v3/Youtube_temp/te-IN")
         
