@@ -16,22 +16,29 @@ def updata_context(metadta_path,output_metadata_file):
         line = data.iloc[i]
         # duration_total = duration_total + line['speech_length_in_s']
         sid = line['sid']
+        audio_book_names = "_".join(sid.split('_')[2:-2])
         zhang = sid.split("_")[-2]
         jie = sid.split("_")[-1]
-        if str(jie) == "0" and (sid.split("_")[-3]+"_"+sid.split("_")[-2]+"_1" in id):
+        # if str(jie) == "0" and (sid.split("_")[-3]+"_"+sid.split("_")[-2]+"_1" in id):
+        if str(jie) == "0" and (audio_book_names+"_"+sid.split("_")[-2]+"_1" in id):
             data.loc[i, 'has_right_context'] = 1
-        elif str(jie) == "0" and (sid.split("_")[-3]+"_"+str(int(zhang)+1).zfill(12)+"_0" in id):
+        # elif str(jie) == "0" and (sid.split("_")[-3]+"_"+str(int(zhang)+1).zfill(10)+"_0" in id):
+        elif str(jie) == "0" and (audio_book_names+"_"+str(int(zhang)+1).zfill(10)+"_0" in id):
             data.loc[i, 'has_right_context'] = 1
-        elif str(jie) != "0" and (sid.split("_")[-3]+"_"+sid.split("_")[-2]+"_"+str(int(jie)+1) in id):
+        # elif str(jie) != "0" and (sid.split("_")[-3]+"_"+sid.split("_")[-2]+"_"+str(int(jie)+1) in id):
+        elif str(jie) != "0" and (audio_book_names+"_"+sid.split("_")[-2]+"_"+str(int(jie)+1) in id):
             data.loc[i, 'has_right_context'] = 1
-        elif str(jie) != "0" and (sid.split("_")[-3]+"_"+str(int(zhang)+1).zfill(12)+"_0" in id):
+        # elif str(jie) != "0" and (sid.split("_")[-3]+"_"+str(int(zhang)+1).zfill(10)+"_0" in id):
+        elif str(jie) != "0" and (audio_book_names+"_"+str(int(zhang)+1).zfill(10)+"_0" in id):
             data.loc[i, 'has_right_context'] = 1
         else:
             data.loc[i, 'has_right_context'] = 0
         
-        word = sid.split("_")[-3]+"_"+str(int(zhang)-1).zfill(12)+"_"
+        # word = sid.split("_")[-3]+"_"+str(int(zhang)-1).zfill(10)+"_"
+        word =audio_book_names+"_"+str(int(zhang)-1).zfill(10)+"_"
         # chunk6624ee2cb51911ee97f5000d3ae5703a_000004_00000_0000400000_0
         # chunk421235dab51911ee97f5000d3ae5703a_000001_00000_0000400001_0
+        # chunk86861dd0da2511efb191002248b81f48_000182_XMLYAudiobook01027-00000_0000000000_0
         if str(jie) == "0" and (len([x for i,x in enumerate(id) if x.find(word) != -1]) !=0):
             # print(len([x for i,x in enumerate(id) if x.find(word) != -1]))
             data.loc[i, 'has_left_context'] = 1
@@ -115,5 +122,5 @@ if __name__ == "__main__":
 
     # path5 = multiprocessing.Process(target=run_word,args=(input_metadata_list[n*4:],input_metadata_path))
     # path5.start()
-    updata_context_WAVNAME(r"C:\Users\v-zhazhai\Downloads\metadata_0_v1.csv",
-                           r"C:\Users\v-zhazhai\Downloads\metadata_0_v2.csv")
+    updata_context(r"C:\Users\v-zhazhai\Desktop\ZhCNMixiaoquan\metadata_ZhCNMixiaoquan_general_v1.csv",
+                           r"C:\Users\v-zhazhai\Desktop\ZhCNMixiaoquan\metadata_ZhCNMixiaoquan_general_v2.csv")

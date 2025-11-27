@@ -4,7 +4,8 @@ import chardet
 import pandas as pd
 import csv
 import glob
-
+import html
+import re
 """
 准备xml
 """
@@ -12,7 +13,18 @@ import glob
 class XMLDUMP():
     def __init__(self) -> None:
         super().__init__()
-    
+    def add_lang_tags(self, text, chunk_locale):
+        if chunk_locale == "zh-cn":
+            text_new = html.escape(text.replace('\n','')).replace('&#x27;',"\'")
+            if re.compile(r'[a-zA-Z]+').search(text_new):
+                add_tags = re.sub(r'([a-zA-Z&;]+)', r"<lang xml:lang='en-US'>\1</lang>", text_new)
+                result = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='zh-CN'><voice name='Microsoft Server Speech Text to Speech Voice (zh-CN, YunyangNeural)'>{}</voice></speak>".format(add_tags).replace("</lang>'<lang xml:lang='en-US'>","\'")
+            else:
+                result = text_new
+        else:
+            result = text
+        return result
+        
     def process_a_filelist(self, input_dir, output_dir):
         data_frame = None
         for file_path in glob.glob(os.path.join(input_dir, "**", "*.txt"), recursive=True):
@@ -23,10 +35,12 @@ class XMLDUMP():
             
             for line in word:
                 text = line.split('\t')[-1].replace('\n','')
+                newtext = self.add_lang_tags(text,"zh-cn")
                 row_values = {
                             # "wav": [name.replace('.txt','.wav')],
                             "wav": [line.split('\t')[0].replace('.wav','')],
-                            "text": [text],
+                            # "text": [text],
+                            "text": [newtext],
                             "textless": ["false"],
                             "human_voice": ["true"],
                             "multispeaker_detect_score": ["-9999"],
@@ -61,11 +75,16 @@ class XMLDUMP():
     
     def process_a_file(self, file_dir):
         data_frame = None
-        with open(file_dir,'r',encoding='utf8') as f:
+        content=codecs.open(file_dir,'rb').read()
+        with open(file_dir,'r',encoding=chardet.detect(content)['encoding']) as f:
             for line in f.readlines():
+                text = line.split('\t')[-1].replace('\n','')
+                newtext = self.add_lang_tags(text,"zh-cn")
+                print(newtext)
                 row_values = {
                         "wav": [line.split('\t')[0]],
-                        "text": [line.split('\t')[-1].replace('\n','')],
+                        # "text": [line.split('\t')[-1].replace('\n','')],
+                        "text": [newtext],
                         "textless": ["false"],
                         "human_voice": ["true"],
                         "multispeaker_detect_score": ["-9999"],
@@ -94,6 +113,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     xml_dump = XMLDUMP()
 
-    input_dir = r"C:\Users\v-zhazhai\Desktop\YFD-zh_cn\4f5330c5-af9d-4552-a689-6f3df78177de.txt"
+    input_dir = r"C:\Users\v-zhazhai\Downloads\xpboy\shao3.txt"
     # output_dir = r"C:\Users\v-zhazhai\Downloads\input\xiaoxin_shi_zhcn_40"
     xml_dump.process_a_file(input_dir)

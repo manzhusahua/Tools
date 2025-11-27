@@ -5,23 +5,26 @@ import codecs
 import chardet
 import json
 import shutil
+import numpy as np
 
 def un_tar(file_name):
-    shutil.copyfile(file_name,file_name+'.tar')
-    # os.renames(file_name,file_name+'.tar')
-    tar = tarfile.open(file_name)
-    names = tar.getnames()
-    if os.path.isdir(file_name + "_files"):
-        pass
-    else:
-        os.mkdir(file_name + "_files")
-    # 由于解压后是许多文件，预先建立同名文件夹
-    for name in names:
-        tar.extract(name, file_name + "_files/")
-    tar.close()
-    # os.remove(file_name)
-    os.remove(file_name+'.tar')
-    return file_name+"_files"
+    if os.path.isfile(file_name):
+        shutil.copyfile(file_name,file_name+'.tar')
+        # os.renames(file_name,file_name+'.tar')
+        tar = tarfile.open(file_name)
+        names = tar.getnames()
+        if os.path.isdir(file_name + "_files"):
+            pass
+        else:
+            os.mkdir(file_name + "_files")
+        # 由于解压后是许多文件，预先建立同名文件夹
+        for name in names:
+            tar.extract(name, file_name + "_files/")
+        tar.close()
+        # os.remove(file_name)
+        os.remove(file_name+'.tar')
+        return file_name+"_files"
+    
 
 def updata_speaker(fine_segment_dir,info_dir):
     # print(len(os.listdir(fine_segment_dir)))
@@ -61,14 +64,14 @@ def updata_speaker(fine_segment_dir,info_dir):
             with open(os.path.join(example_dir, str(m),"speaker"),"w",encoding="utf8",) as save_json:
                 json.dump(row_values, save_json)
 
-
 def zip_tar(fine_segment_dir,fine_segment_name):
     if os.path.exists(fine_segment_name):
         os.remove(fine_segment_name)
     os.chdir(fine_segment_dir)
+    print(len(os.listdir(fine_segment_dir)))
     count = ' '.join(str(n) for n in range(0,len(os.listdir(fine_segment_dir))))
-    # with open(r"C:\Users\v-zhazhai\Desktop\1.sh",'w',encoding='utf8') as s:
-    #     s.writelines(f"tar -cvf {fine_segment_name} {count}")
+    # count = ' '.join(str(n) for n in range(1102,2187))
+    # count = ' '.join(str(n) for n in range(2187,len(os.listdir(fine_segment_dir))))
     os.system(f"tar -cvf {fine_segment_name} {count}")
     
 def updata_spk(info_dir):
@@ -84,45 +87,63 @@ def updata_spk(info_dir):
         os.remove(file)
         os.renames(file+"_1",file)
 
-
-def updata_info(info_files,savefile):
+def updata_info(info_files,savefile,style):
     un_tar_path = un_tar(info_files)
-    # for file_path in glob.glob(os.path.join(un_tar_path, "**", "original_fname"), recursive=True):
-    #     # print(file)
-    #     content=codecs.open(file_path,'rb').read()
-    #     word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()[0]
-    #     # print(word)
+    for file_path in glob.glob(os.path.join(un_tar_path, "**", "original_fname"), recursive=True):
+        content=codecs.open(file_path,'rb').read()
+        word = open(file_path,'r',encoding=chardet.detect(content)['encoding']).readlines()[0]
         
         
-    #     additional_info = {"AudioFileName": f"{os.path.basename(word)}", "Style": f"{os.path.basename(word).split('_')[1]}","Emotional intensity":f"{os.path.basename(word).split('_')[2]}", "Source": "emotional"}
-    #     save_additional_info = file_path.replace("original_fname","additional_info")
-    #     with open(save_additional_info,'w',encoding='utf8') as s:
-    #         s.writelines(str(additional_info))
-    # zip_tar(un_tar_path,savefile)
+        # additional_info = {"AudioFileName": f"{os.path.basename(word)}", "Style": f"{os.path.basename(word).split('_')[1]}","Emotional intensity":f"{os.path.basename(word).split('_')[2]}", "Source": "emotional"}
+        additional_info = {"AudioFileName": f"{os.path.basename(word)}", "speaker": "ZhCNM100","style":f"{style}"}
+        save_additional_info = file_path.replace("original_fname","additional_info")
+        with open(save_additional_info,'w',encoding='utf8') as s:
+            s.writelines(str(additional_info).replace("'","\""))
+    zip_tar(un_tar_path,savefile)
     # shutil.rmtree(un_tar_path)
 
-if __name__=="__main__":
-    # fine_segment_file = r"C:\Users\v-zhazhai\Downloads\chunkoutput1\huangzhizhong\chunk_huangzhizhong_0.fine_segment"
-    # info_file = r"C:\Users\v-zhazhai\Downloads\chunkoutput1\huangzhizhong\chunk_huangzhizhong_0.info"
-    # fine_segment_name = r"C:\Users\v-zhazhai\Downloads\chunkoutput1\nezha\chunk_nezha_0.fine_segment"
-    # fine_segment_dir =un_tar(fine_segment_file)
-    # info_dir = un_tar(info_file)
-    # updata_speaker(fine_segment_dir,info_dir)
-    # zip_tar(fine_segment_dir,fine_segment_file)
-    # updata_spk(r"C:\Users\v-zhazhai\Downloads\chunkoutput1\huangzhizhong\chunk_huangzhizhong_0 - 副本.info")
-    # transmlplist = ["segment_transcription","segment_transcription_beforeTN","segment_sr_transcription"]
-    # coarse_segment_dir = un_tar(r"C:\Users\v-zhazhai\Downloads\ZhCNF128_ttschunk_finesegment_5\chunk_ZhCNF128_Emotion_Aegis_0.fine_segment")
-    # coarse_segment_dir = r"C:\Users\v-zhazhai\Downloads\ZhCNF128_ttschunk_finesegment_5\chunk_ZhCNF128_Emotion_Aegis_0.fine_segment_files"
-    # # save_coarse_segment = r"C:\Users\v-zhazhai\Downloads\ZhCNF128_ttschunk_finesegment_5_output\chunk_ZhCNF128_Emotion_Aegis_0"
-    # for trans in transmlplist:
-    #     for file in glob.glob(os.path.join(coarse_segment_dir, "**", f"{trans}"), recursive=True):
-    #         print(file)
-            # print(file.split("\\")[-3].zfill(5))
-    #         save_file = os.path.join(save_coarse_segment,file.split("\\")[-3].zfill(5),"coarse_segment","coarse_"+file.split("\\")[-2]+f"_{trans}")
-    #         shutil.copyfile(file,save_file)
-    # updata_info(r"C:\Users\v-zhazhai\Downloads\emotional\chunk_a0ab6d9cb9ca94755fae4c2cc67f5a4c_0.info",r"C:\Users\v-zhazhai\Downloads\emotional\updata\chunk_a0ab6d9cb9ca94755fae4c2cc67f5a4c_0.info")
-    inputdir = r"C:\Users\v-zhazhai\Downloads\batch02"
+def renames(inputdir):
+    savedir = inputdir+"_renames"
+    os.makedirs(savedir,exist_ok=True)
+    n=0
     for line in os.listdir(inputdir):
-        un_tar(os.path.join(inputdir,line))
-    # zip_tar(r"C:\Users\v-zhazhai\Downloads\emotional\chunk_c8e9f3f1875ad6389e6131e78c41097e_0.info_files",r"C:\Users\v-zhazhai\Downloads\emotional\updata\chunk_c8e9f3f1875ad6389e6131e78c41097e_0.info")
-    # 03-01-01-01-01-116-02-02-02-05
+        os.renames(os.path.join(inputdir,line),os.path.join(savedir,str(n)))
+        n+=1
+    os.renames(savedir,inputdir)
+
+def get_times_count(info_dir):
+    times = 0.0
+    times1 = []
+    n=0
+    count = []
+    for line in glob.glob(os.path.join(info_dir,"**\\*duration"), recursive=True):
+        times+=float(np.fromfile(line)[0])
+        if times>7200:
+            count.append(n)
+            times1.append(times)
+            times = 0
+        n+=1
+    print(count,times1,n,times)
+    
+if __name__=="__main__":
+    
+    # maplist = ["audio_48k_denoised_files","audio_files","coarse_segment_files","fine_segment_files","info_files","richland_result_files"]
+    inputdir = r"C:\Users\v-zhazhai\Desktop\ZhCNM100"
+    savedir = r"C:\Users\v-zhazhai\Desktop\ZhCNM100_1"
+    chunk_name = "chunk_ZhCNF128_customerservice_Reference_Customer_Weiwei_1"
+    zip_tar(r"C:\Users\v-zhazhai\debug\Chat\chunk_090faaaffa02283259fa1ea2d809cff2_0.audio_48k_denoised_files",r"C:\Users\v-zhazhai\debug\Chat\chunk_090faaaffa02283259fa1ea2d809cff2_0.audio_48k_denoised")
+    # os.makedirs(savedir,exist_ok=True)
+    # for line in os.listdir(inputdir):
+    #     if ".json" not in line:
+    #         # un_tar(os.path.join(inputdir,line))
+    #         style = line.split("_")[2]
+    #         # print(style)
+    #         updata_info(os.path.join(inputdir,line),os.path.join(savedir,line),style)
+    # save_path = os.path.split(inputdir)[0]
+    # for names in maplist:
+    #     fine_segment_dir = os.path.join(inputdir,f"{chunk_name}."+names)
+        
+    #     fine_segment_name = os.path.join(save_path,f"{chunk_name}.{names.replace('_files','')}")
+    #     renames(fine_segment_dir)
+    #     zip_tar(fine_segment_dir,fine_segment_name)
+    # get_times_count(os.path.join(inputdir,f"{chunk_name}.info_files"))

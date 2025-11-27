@@ -593,7 +593,6 @@ class ASVP_ESD:
             with open(save_additional_info,'w',encoding='utf8') as s:
                 s.writelines(str(additional_info))
 
-
 class EmotionPerceptionInSchizophrenia:
     def prepare_json(self,infofile,savefile):
         for file_path in glob.glob(os.path.join(infofile, "**", "original_fname"), recursive=True):
@@ -605,11 +604,51 @@ class EmotionPerceptionInSchizophrenia:
             additional_info["Style"] = stylemap[os.path.basename(word).replace(".wav","")]
             with open(file_path.replace("original_fname","additional_info"),'w',encoding='utf8') as s:
                 s.writelines(str(additional_info))
-                
+
+class CAVES:
+    def prepare_json(inputdir,outputdir):
+        os.makedirs(outputdir,exist_ok=True)
+        with open(inputdir,'r',encoding='utf8') as f:
+            for line in f.readlines():
+                line = line.replace("\n","")
+                if ".wav" in line:
+                    Gender = ""
+                    if "m" in os.path.basename(line).split("_")[0]:
+                        Gender = 'male'
+                    else:
+                        Gender = 'female'
+                    row_values = {
+                        "AudioFileName": "{}".format(os.path.basename(line)),
+                        "Gender": "{}".format(Gender),
+                        "Emotion": "{}".format(os.path.basename(line).split("_")[-2]),
+                        "DataName": "{}".format("CAVES"),
+                        "Source": "emotional",
+                        }
+                    with open(os.path.join(outputdir, os.path.basename(line).replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                        json.dump(row_values, save_json, indent=4)
+
+class ANAD:
+    def prepare_json(inputdir,outputdir):
+        os.makedirs(outputdir,exist_ok=True)
+        data1 = pd.read_csv(inputdir, sep=",", encoding="utf8", low_memory=False)
+        index = list(range(data1.shape[0]))
+        for i in index:
+            # print(data1.iloc[i]["name"])
+            # print(data1.iloc[i]["Emotion "])
+            row_values = {
+                "AudioFileName": "{}".format(data1.iloc[i]["name"].replace("'","")),
+                "Emotion": "{}".format(data1.iloc[i]["Emotion "]),
+                "DataName": "{}".format("ANAD"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir, data1.iloc[i]["name"].replace("'","").replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+        #     with open(os.path.join(outputdir,data1.iloc[i]["file_name"].replace(".wav",".txt")),'w',encoding='utf8') as s:
+        #         s.writelines(data1.iloc[i]["sentence"]+'\n')
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Downloads\emotional\chunk_c8e9f3f1875ad6389e6131e78c41097e_0.info_files"
-    outputdir = r"C:\Users\v-zhazhai\Downloads\emotional\updata\chunk_a0ab6d9cb9ca94755fae4c2cc67f5a4c_2.info"
+    inputdir = r"C:\Users\v-zhazhai\Toosl\Tools\arabic-natural-audio-dataset\ANAD.csv"
+    outputdir = r"C:\Users\v-zhazhai\Toosl\Tools\arabic-natural-audio-dataset\ANAD"
     # if not os.path.exists(outputdir):
     #     os.makedirs(outputdir, exist_ok=True)
-    EmotionPerceptionInSchizophrenia().prepare_json(inputdir, outputdir)
+    ANAD.prepare_json(inputdir, outputdir)
     # Thorsten.prepare_json(inputdir)

@@ -20,20 +20,21 @@ def not_fold(speaker,suncoumt,save_path,locale,general):
                         f.writelines("speaker|locale|style|metadata_path"+"\n")
                         f.writelines(speaker+"|"+locale+"|"+general+"|../metadata_"+str(n)+".csv\n")
                          
-def has_folder(speaker,metadatafloder):
+def has_folder(speaker,metadatafloder,locale):
         m=0
         for name in os.listdir(metadatafloder):
                 os.mkdir(os.path.join(metadatafloder,str(m).zfill(5)))
                 with open(os.path.join(metadatafloder,str(m).zfill(5),"registry.csv"),'w',encoding='utf8') as f:
                         f.writelines("speaker|locale|style|metadata_path"+"\n")
-                        f.writelines("%s|en-us|general|../%s\n" % (speaker,name))
+                        f.writelines("%s|%s|general|../%s\n" % (speaker,locale,name))
                 m+=1
 
 if __name__ == "__main__":
         # has_folder("EnUSLibri-RTTS",r"C:\Users\v-zhazhai\Desktop\merged_more_books_with_small_metadata_updata_sid_context_speaker2")
         speaker = "Jessa"
         suncoumt = 0
-        save_path = r"C:\Users\v-zhazhai\Downloads"
+        save_path = r"C:\Users\v-zhazhai\Desktop\ZhCNMixiaoquan"
         locale = "zh-cn"
         general = "general"
-        not_fold(speaker,suncoumt,save_path,locale,general)
+        # not_fold(speaker,suncoumt,save_path,locale,general)
+        has_folder(speaker,save_path,locale)
