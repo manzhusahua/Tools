@@ -536,7 +536,6 @@ class emozionalmente_dataset:
             with open(os.path.join(outputdir,data1.iloc[i]["file_name"].replace(".wav",".txt")),'w',encoding='utf8') as s:
                 s.writelines(data1.iloc[i]["sentence"]+'\n')
 
-
 class ASVP_ESD:
     def prepare_json(self,infofile,savefile):
         for file_path in glob.glob(os.path.join(infofile, "**", "original_fname"), recursive=True):
@@ -630,25 +629,84 @@ class CAVES:
 class ANAD:
     def prepare_json(inputdir,outputdir):
         os.makedirs(outputdir,exist_ok=True)
-        data1 = pd.read_csv(inputdir, sep=",", encoding="utf8", low_memory=False)
+        data1 = pd.read_csv(inputdir, sep="\t", encoding="utf8", low_memory=False)
         index = list(range(data1.shape[0]))
         for i in index:
-            # print(data1.iloc[i]["name"])
-            # print(data1.iloc[i]["Emotion "])
             row_values = {
-                "AudioFileName": "{}".format(data1.iloc[i]["name"].replace("'","")),
-                "Emotion": "{}".format(data1.iloc[i]["Emotion "]),
-                "DataName": "{}".format("ANAD"),
+                "AudioFileName": "{}".format(data1.iloc[i]["filename"]),
+                "Emotion": "{}".format(data1.iloc[i]["Class"]),
+                "DataName": "{}".format("BANSpEmo"),
                 "Source": "emotional",
                 }
-            with open(os.path.join(outputdir, data1.iloc[i]["name"].replace("'","").replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+            with open(os.path.join(outputdir, data1.iloc[i]["filename"].replace(".wav",".json")),"w",encoding="utf8",) as save_json:
                 json.dump(row_values, save_json, indent=4)
-        #     with open(os.path.join(outputdir,data1.iloc[i]["file_name"].replace(".wav",".txt")),'w',encoding='utf8') as s:
-        #         s.writelines(data1.iloc[i]["sentence"]+'\n')
+
+class BAVED:
+    def prepare_json(inputdir,outputdir):
+        os.makedirs(outputdir,exist_ok=True)
+        spoken_word_map = {"01":"বারোটা বেজে গেছে","02":"আমি জানতাম এমন কিছু হবে","03":"এ কেমন উপহার"}
+        Emotion = {"01":"Happy","02":"Sad","03":"Angry","04":"Surprise"}
+        for file_path in glob.glob(os.path.join(inputdir, "**", "*.wav"), recursive=True):
+            names = os.path.basename(file_path)
+            Name_emotion = Emotion[file_path.split("-")[-5]]
+            Intensity = file_path.split("-")[-4]
+            word = spoken_word_map[file_path.split("-")[-3]]
+            Number = file_path.split("-")[-2]
+            print(Name_emotion)
+            row_values = {
+                "AudioFileName": "{}".format(names),
+                "Emotion": "{}".format(Name_emotion),
+                "Trans": "{}".format(word),
+                "Normal intensity": "{}".format(Intensity),
+                "Scripted": "{}".format("Scripted "),
+                "Number of repetition": "{}".format(f"{Number}"),
+                "DataName": "{}".format("B-SER"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir,names.replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+            with open(os.path.join(outputdir,names.replace(".wav",".txt")),'w',encoding='utf8') as s:
+                s.writelines(word+'\n')
+
+class EmoDB:
+    def prepare_json(inputdir,outputdir):
+        os.makedirs(outputdir,exist_ok=True)
+        speakers_map = {"03":"male, 31 years","08":"female, 34 years","09":"female, 21 years","10":"male, 32 years","11":"male, 26 years","12":"male, 30 years","13":"female, 32 years","14":"female, 35 years","15":"male, 25 years","16":"female, 31 years"}
+        emotions_map = {"W":"anger","L":"boredom","E":"disgust","A":"fear","F":"happiness","T":"sadness","N":"neutral"}
+        for file_path in os.listdir(inputdir):
+            speakers = speakers_map[file_path[:2]]
+            emotions = emotions_map[file_path[5]]
+            print(emotions)
+            row_values = {
+                "AudioFileName": "{}".format(file_path),
+                "Age": "{}".format(speakers.split(", ")[-1].replace(" years","")),
+                "Gender": "{}".format(speakers.split(",")[0]),
+                "Emotion": "{}".format(emotions),
+                "DataName": "{}".format("freely available German emotional database"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir,file_path.replace(".wav",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+
+class enterface:
+    def prepare_json(inputdir,outputdir):
+        os.makedirs(outputdir,exist_ok=True)
+        for file_path in glob.glob(os.path.join(inputdir, "**", "*.avi"), recursive=True):
+            # print(file_path)
+            emotions = file_path.split("\\")[7]
+            row_values = {
+                "AudioFileName": "{}".format(file_path.replace(inputdir+"\\","").replace("\\","/")),
+                "Emotion": "{}".format(emotions),
+                "DataName": "{}".format("enterface database"),
+                "Source": "emotional",
+                }
+            with open(os.path.join(outputdir,os.path.basename(file_path).replace(".avi",".json")),"w",encoding="utf8",) as save_json:
+                json.dump(row_values, save_json, indent=4)
+
 if __name__ == "__main__":
-    inputdir = r"C:\Users\v-zhazhai\Toosl\Tools\arabic-natural-audio-dataset\ANAD.csv"
-    outputdir = r"C:\Users\v-zhazhai\Toosl\Tools\arabic-natural-audio-dataset\ANAD"
+    inputdir = r"C:\Users\v-zhazhai\Downloads\project2_database\enterface database"
+    outputdir = r"C:\Users\v-zhazhai\Downloads\project2_database\trans"
     # if not os.path.exists(outputdir):
     #     os.makedirs(outputdir, exist_ok=True)
-    ANAD.prepare_json(inputdir, outputdir)
+    enterface.prepare_json(inputdir, outputdir)
     # Thorsten.prepare_json(inputdir)

@@ -83,8 +83,8 @@ class XMLDUMP():
                 print(newtext)
                 row_values = {
                         "wav": [line.split('\t')[0]],
-                        # "text": [line.split('\t')[-1].replace('\n','')],
-                        "text": [newtext],
+                        "text": [line.split('\t')[-1].replace('\n','')],
+                        # "text": [newtext],
                         "textless": ["false"],
                         "human_voice": ["true"],
                         "multispeaker_detect_score": ["-9999"],
@@ -113,6 +113,6 @@ def run(mini_batch):
 if __name__ == "__main__":
     xml_dump = XMLDUMP()
 
-    input_dir = r"C:\Users\v-zhazhai\Downloads\xpboy\shao3.txt"
+    input_dir = r"C:\Users\v-zhazhai\debug\xml\coarse_0.txt"
     # output_dir = r"C:\Users\v-zhazhai\Downloads\input\xiaoxin_shi_zhcn_40"
     xml_dump.process_a_file(input_dir)

@@ -1,0 +1,14 @@
+{
+    "de-de_asr": {
+        "Description": "have trans",
+        "Raw data amount(hours)": 21990,
+        "V3 chunk data amount(hours)": 20294,
+        "Valid data amount in V3(hours)": 20290,
+        "Valid data ratio": "99.98%",
+        "File List": "realisticttsdataset_v3/train/dataset/tier1/de-de/asr/all.txt",
+        "Yaml List": "realisticttsdataset_v3/train/yaml/tier1/de-de/asr/all.txt",
+        "Statistics result path": "realisticttsdataset_v3/train/statistics/tier1/de-de/asr/",
+        "Data processed result path": "https://stdstoragettsdp01eus.blob.core.windows.net/data/TTS_ChunkData/ASR/v3/chunk_output/de-DE/batch01/",
+        "Data process job": "https://ml.azure.com/experiments/id/9dfce25d-9824-41bb-bb0d-0029831273f5/runs/3d5702c8-a30a-47b0-970e-f1fad81a0d69?wsid=/subscriptions/3d75862d-3a43-450d-8046-895947d5abfa/resourcegroups/zetta-prod-eus/workspaces/zetta-prod-ws01-eus&tid=72f988bf-86f1-41af-91ab-2d7cd011db47"
+    }
+}

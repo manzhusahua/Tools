@@ -6,7 +6,7 @@ import chardet
 import tarfile
 import numpy as np
 import pandas as pd
-
+import json
 def renames(loaca1,loaca2):
     stdstoragetts01eus = f'C:/Users/v-zhazhai/Toosl/code/Tool/merger_tar/azcopy.exe copy "https://stdstoragettsdp01wus2.blob.core.windows.net/data/TTS_ChunkData/Dict/v1/chunk_output/{loaca1}/*?sv=2025-07-05&st=2025-11-07T03%3A02%3A52Z&se=2025-11-14T03%3A17%3A52Z&skoid=c52a83f4-cefb-4d0c-a81d-a2747c46fd59&sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&skt=2025-11-07T03%3A02%3A52Z&ske=2025-11-14T03%3A17%3A52Z&sks=b&skv=2025-07-05&sr=c&sp=rlt&sig=qOtWs%2BvMXCryk6IFwe2iESXHKqfQZwXkrJUExB1xWe4%3D" "https://stdstoragetts01eus.blob.core.windows.net/data/realisticttsdataset_v3/train/chunks/{loaca2}/dictionary/Wiki_dictionary/?sv=2025-07-05&st=2025-11-07T03%3A02%3A55Z&se=2025-11-14T03%3A17%3A55Z&skoid=c52a83f4-cefb-4d0c-a81d-a2747c46fd59&sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&skt=2025-11-07T03%3A02%3A55Z&ske=2025-11-14T03%3A17%3A55Z&sks=b&skv=2025-07-05&sr=c&sp=rwlt&sig=5QT4DHYHMKRXU31npwzkjTczW2CINkHkLpz%2F5sLYcH4%3D" --overwrite=false --from-to=BlobBlob --s2s-preserve-access-tier=false --check-length=true --include-directory-stub=false --s2s-preserve-blob-tags=false --recursive --log-level=INFO'
     # os.system(stdstoragetts01eus)
@@ -51,6 +51,15 @@ def copy_chunk(filelist):
 def download(filename):
     download_word = fr'C:/Users/v-zhazhai/Toosl/code/Tool/merger_tar/azcopy.exe copy "https://stdstoragettsdp01eus.blob.core.windows.net/data/v-honzho/data/podcast/Solo/fr_result/es-ES/1_renamed/audioPath/{filename}?sv=2025-07-05&st=2025-11-24T02%3A14%3A23Z&se=2025-12-01T02%3A29%3A23Z&skoid=c52a83f4-cefb-4d0c-a81d-a2747c46fd59&sktid=72f988bf-86f1-41af-91ab-2d7cd011db47&skt=2025-11-24T02%3A14%3A23Z&ske=2025-12-01T02%3A29%3A23Z&sks=b&skv=2025-07-05&sr=c&sp=rl&sig=XzUDg%2BMcyQ1hvF5p8T60Tvj3lTLLfRmQuiQ1vMrCWQk%3D" "C:\Users\v-zhazhai\Downloads\log\audioPath\{filename}" --overwrite=prompt --check-md5 FailIfDifferent --from-to=BlobLocal --recursive --log-level=INFO'
     os.system(download_word)
+def Result_viewing(jsonfile):
+    with open(jsonfile, "r",encoding="utf8") as file:
+        data = json.load(file)
+    duration = data["durationMilliseconds"]
+    offset = data["phrases"][0]["offsetMilliseconds"]
+    for line in data["phrases"]:
+        offset+=line["durationMilliseconds"]
+    ratio =  str(round(offset/duration, 3))
+    print(ratio)
 if __name__ == "__main__":
     # renames("zh","tier1/zh-cn")
     # split_metatda(r"C:\Users\v-zhazhai\Desktop\ZhCNMixiaoquan\metadata_ZhCNMixiaoquan_general.csv",r"C:\Users\v-zhazhai\Desktop\ZhCNMixiaoquan")
@@ -58,12 +67,28 @@ if __name__ == "__main__":
     # for line in os.listdir(inputdir):
     #     os.renames(os.path.join(inputdir,line),
     #                os.path.join(inputdir,line.replace(".wav","")))
-    transdir = r"C:\Users\v-zhazhai\Environment\RealisticTTSDatasets\dataset"
-    for file_path in glob.glob(os.path.join(transdir, "**", "all.txt"), recursive=True):
-        if "tier2\\zh-hk\\all.txt" in file_path:
-            with open(file_path,'r',encoding='utf8') as f,open(file_path.replace(".txt","_clean.txt"),'w',encoding="utf8") as s:
-                for line in f.readlines():
-                    if "/datablob/realisticttsdataset_v3/train/chunks/tier2/zh-hk/podcast_rss" not in line:
-                        # print(file_path)
-                        # break
-                        s.writelines(line)
+    # transdir = r"C:\Users\v-zhazhai\Environment\RealisticTTSDatasets\dataset"
+    # for file_path in glob.glob(os.path.join(transdir, "**", "all.txt"), recursive=True):
+    #     if "tier2\\zh-hk\\all.txt" in file_path:
+    #         with open(file_path,'r',encoding='utf8') as f,open(file_path.replace(".txt","_clean.txt"),'w',encoding="utf8") as s:
+    #             for line in f.readlines():
+    #                 if "/datablob/realisticttsdataset_v3/train/chunks/tier2/zh-hk/podcast_rss" not in line:
+    #                     # print(file_path)
+    #                     # break
+    #                     s.writelines(line)
+    # with open(r"C:\Users\v-zhazhai\Downloads\all.txt",'r',encoding='utf8') as f,open(r"C:\Users\v-zhazhai\Downloads\all_datatset.txt",'w',encoding='utf8') as s:
+    #     dataset = []
+    #     for line in f.readlines():
+    #         if os.path.split(line)[0] not in dataset:
+    #             dataset.append(os.path.split(line)[0])
+    #             s.writelines(os.path.split(line)[0]+'\n')
+    #         # print(os.path.split(line)[0])
+    inputdir = r"C:\Users\v-zhazhai\debug\chunk_1498c1d728222abaffb09f43996f310a_0.coarse_segment"
+    for file_path in glob.glob(os.path.join(inputdir, "**\\*"), recursive=True):
+        # print(file_path)
+        if "\et" in file_path:
+            save_path = file_path.replace(".coarse_segment","")
+            print(save_path)
+            os.makedirs(os.path.split(save_path)[0],exist_ok=True)
+            # shutil.move(file_path)
+            shutil.copyfile(file_path,save_path)
